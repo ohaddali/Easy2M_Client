@@ -60,21 +60,11 @@ public class HttpConnection
         queue = Volley.newRequestQueue(context);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,param,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response)
-                    {
-                        responseCallBack.execute(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        if(errorResponseCallBack != null)
-                            errorResponseCallBack.execute(error);
-                    }
-        });
+                response -> responseCallBack.execute(response),
+                error -> {
+                    if(errorResponseCallBack != null)
+                        errorResponseCallBack.execute(error);
+                });
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
@@ -85,10 +75,7 @@ public class HttpConnection
         Map<String,String> json = new HashMap<>();
         for(Pair<String,Object> param : params)
         {
-            if(param.second instanceof Map)
-                json.put(param.first , new JSONObject((Map<String,String>)param.second).toString());
-            else
-                json.put(param.first , param.second.toString());
+            json.put(param.first , param.second.toString());
         }
 
         return new JSONObject(json);

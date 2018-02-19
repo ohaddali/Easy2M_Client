@@ -17,18 +17,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         HttpConnection httpConnection = HttpConnection.getInstance(this);
-        String serviceName = "x";
-        String methodName = "Y";
+        String serviceName = "AuthService";
+        String methodName = "register";
         CallBack<JSONObject> responseCallBack = (jsonObject) ->{
-            User user = new User();
-            user.fromJSONObject(jsonObject[0]);
 
 
         };
-        Map<String,String> map = new HashMap<>();
-        map.put("a","1");
-        Pair<String,Object> param1 = new Pair<>("param1Name" , map);
-        Pair<String,Object> param2 = new Pair<>("param2Name" , "s");
-        httpConnection.send(serviceName , methodName , responseCallBack , null , param1 , param2);
+
+        Pair<String,Object> param1 = new Pair<>("param1Name" , "ohad");
+        Pair<String,Object> param2 = new Pair<>("param2Name" , "123");
+        Pair<String,Object> param3 = new Pair<>("param2Name" , "true");
+        httpConnection.send(serviceName , methodName , responseCallBack , null , param1 , param2 , param3);
     }
 }
