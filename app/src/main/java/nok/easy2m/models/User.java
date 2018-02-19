@@ -11,6 +11,8 @@ public class User
     private String username;
     private boolean admin;
     private String name;
+    private String phoneNumber;
+    private String birthdate;
 
     public User()
     {
@@ -46,5 +48,21 @@ public class User
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 }

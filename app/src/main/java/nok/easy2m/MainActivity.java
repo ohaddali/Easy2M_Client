@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import nok.easy2m.models.User;
 
@@ -41,12 +42,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(user.isLoggedIn()) {
                 if (user.isAdmin())
                 {
-                    //Admin Intent
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG);
                 }
                 else
                 {
                     //Worker Intent
                 }
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"username or password is incorrect",Toast.LENGTH_LONG);
             }
         }
 

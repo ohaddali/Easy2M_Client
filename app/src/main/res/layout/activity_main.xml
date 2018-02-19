@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="nok.easy2m.MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginStart="3dp"
         android:text="Login:"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="148dp" />
+        app:layout_constraintBottom_toTopOf="@+id/usernameText"
+        app:layout_constraintStart_toStartOf="@+id/usernameText" />
 
     <EditText
         android:id="@+id/usernameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
         android:ems="10"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="180dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/passwordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="246dp" />
+        app:layout_constraintStart_toStartOf="@+id/usernameText"
+        app:layout_constraintTop_toBottomOf="@+id/usernameText" />
 
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LOGIN"
-        tools:layout_editor_absoluteX="212dp"
-        tools:layout_editor_absoluteY="292dp" />
+        app:layout_constraintEnd_toEndOf="@+id/passwordText"
+        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
 
     <Button
         android:id="@+id/registerBtn"
-        style="@android:style/Widget.Material.Button.ButtonBar.AlertDialog"
+        style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
         android:textColor="@color/colorPrimaryDark"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="292dp" />
+        app:layout_constraintStart_toStartOf="@+id/passwordText"
+        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
 
 </android.support.constraint.ConstraintLayout>
