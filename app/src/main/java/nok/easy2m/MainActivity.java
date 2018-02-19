@@ -6,6 +6,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -60,12 +61,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(user.isLoggedIn()) {
                 if (user.isAdmin())
                 {
-                    //Admin Intent
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG);
                 }
                 else
                 {
                     //Worker Intent
                 }
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"username or password is incorrect",Toast.LENGTH_LONG);
             }
         }
 
