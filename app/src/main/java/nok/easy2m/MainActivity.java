@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import nok.easy2m.models.Services;
 import nok.easy2m.models.User;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -21,27 +22,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button registerBtn;
     TextView usernameText;
     TextView passwordText;
+    HttpConnection httpConnection;
+    CallBack<JSONObject> responseCallBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        HttpConnection httpConnection = HttpConnection.getInstance(this);
+        httpConnection = HttpConnection.getInstance(this);
         String serviceName = "x";
         String methodName = "Y";
         CallBack<JSONObject> responseCallBack = (jsonObject) ->{
             User user = new User();
             user.fromJSONObject(jsonObject[0]);
-
-
         };
+
         Map<String,String> map = new HashMap<>();
         map.put("a","1");
         Pair<String,Object> param1 = new Pair<>("param1Name" , map);
         Pair<String,Object> param2 = new Pair<>("param2Name" , "s");
         httpConnection.send(serviceName , methodName , responseCallBack , null , param1 , param2);
-
-
 
         loginBtn = findViewById(R.id.loginBtn);
         registerBtn = findViewById(R.id.registerBtn);
@@ -57,15 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             String username = usernameText.getText().toString();
             String password = usernameText.getText().toString();
-            User user =loginStub(username,password);
+            User user =login(username,password);
             if(user.isLoggedIn()) {
                 if (user.isAdmin())
                 {
-                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG);
+
+                    Toast.makeText(getApplicationContext(),"Admin Success",Toast.LENGTH_LONG);
                 }
                 else
                 {
-                    //Worker Intent
+                    Toast.makeText(getApplicationContext(),"Worker Success",Toast.LENGTH_LONG);
                 }
             }
             else
@@ -77,9 +79,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-    private User loginStub(String username, String password)
+    private User login(String username , String password)
     {
-        return new User();
+        User user = new User();
+        responseCallBack = (JSONObject) -> {
+            user.fromJSONObject(JSONObject[0]);
+        };
+        Pair <String , Object> pair1 = new Pair<>("username",username);
+        Pair <String , Object> pair2 = new Pair<>("password",password);
+        httpConnection.send(Services.auth,"login",responseCallBack , null , pair1, pair2);
+
+        return user;
     }
+
+
 }

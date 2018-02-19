@@ -1,10 +1,18 @@
 package nok.easy2m.models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import nok.easy2m.SerializableObject;
+
 /**
  * Created by pc on 2/19/2018.
  */
 
-public class User
+public class User implements SerializableObject
 {
 
     private boolean loggedIn;
@@ -64,5 +72,21 @@ public class User
 
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
+    }
+
+
+    @Override
+    public void fromJSONObject(JSONObject jsonObject)
+    {
+        try {
+            loggedIn = jsonObject.getBoolean("loggedIn");;
+            username= jsonObject.getString("username");
+            admin = jsonObject.getBoolean("admin");
+            name =jsonObject.getString("name");
+            phoneNumber =jsonObject.getString("phoneNumber");
+            birthdate= jsonObject.getString("birthdate");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
