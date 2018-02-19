@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
+
 
 /**
  * Created by naordalal on 19/02/2018.
@@ -23,6 +23,5 @@ public interface SerializableObject
             return null;
         }
     }
-
     void fromJSONObject(JSONObject jsonObject); // Deserialize json into object fields
 }

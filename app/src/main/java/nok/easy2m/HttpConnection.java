@@ -49,7 +49,7 @@ public class HttpConnection
      @param methodName the method name to call
      @param responseCallBack call back that except the response of request
      @param errorResponseCallBack call back that except the error of request
-     @param params params that send on the body of the post request , each param is of the form Pair(String,Value) or Pair(String,Map(String,Value))
+     @param params params that send on the body of the post request , each param is of the form Pair(String,Value) or Pair(String,JsonObject)
      */
     public void send(String serviceName , String methodName , final @NotNull CallBack<JSONObject> responseCallBack
             , final @Nullable CallBack<VolleyError> errorResponseCallBack , Pair<String,Object>... params)
