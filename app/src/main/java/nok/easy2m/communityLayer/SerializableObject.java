@@ -1,4 +1,4 @@
-package nok.easy2m;
+package nok.easy2m.communityLayer;
 
 import com.google.gson.Gson;
 

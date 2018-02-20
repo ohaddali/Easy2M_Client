@@ -1,4 +1,4 @@
-package nok.easy2m;
+package nok.easy2m.communityLayer;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

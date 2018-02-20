@@ -3,10 +3,7 @@ package nok.easy2m.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import nok.easy2m.SerializableObject;
+import nok.easy2m.communityLayer.SerializableObject;
 
 /**
  * Created by pc on 2/19/2018.
