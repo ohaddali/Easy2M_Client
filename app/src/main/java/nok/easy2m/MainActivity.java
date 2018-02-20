@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Activity activity = this;
             CallBack<JSONObject> responseCallBack = (JSONObject) ->
             {
+
                 User user = new User();
                 user.fromJSONObject(JSONObject);
 
