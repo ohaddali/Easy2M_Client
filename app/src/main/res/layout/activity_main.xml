@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nok.easy2m.MainActivity">
+    tools:context="nok.easy2m.activities.MainActivity"
+    android:layoutDirection="ltr">
 
     <TextView
         android:id="@+id/textView"
