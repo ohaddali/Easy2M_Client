@@ -1,18 +1,24 @@
 package nok.easy2m;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.microsoft.windowsazure.notifications.NotificationsManager;
 
 import nok.easy2m.models.Services;
 import nok.easy2m.models.User;
@@ -24,19 +30,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView usernameText;
     TextView passwordText;
     HttpConnection httpConnection;
-
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*Uri uri = getIntent().getData(); //get URI
+        if(uri != null) //if we come from URI
+        {
+            String key = "";
+            String parameter = uri.getQueryParameter(key); //get query parameter from URI s.t. get X for query ?X=Value
+        }*/
 
         loginBtn = findViewById(R.id.loginBtn);
         registerBtn = findViewById(R.id.registerBtn);
         usernameText = findViewById(R.id.usernameText);
         passwordText = findViewById(R.id.passwordText);
         loginBtn.setOnClickListener(this);
+
+        Intent intent = new Intent(this , AddWorkersActivity.class);
+        startActivity(intent);
+        NotificationsManager.handleNotifications(this, NotificationSettings.SenderId, MyHandler.class);
     }
 
     @Override
@@ -47,13 +64,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String username = usernameText.getText().toString();
             String password = usernameText.getText().toString();
             Activity activity = this;
-            CallBack<JSONObject> responseCallBack = (JSONObject) ->
+            CallBack<User> responseCallBack = (user) ->
             {
-
-                User user = new User();
-                user.fromJSONObject(JSONObject);
-
-                if (user.isLoggedIn()) {
+                if (user.isLoggedIn())
+                {
+                    activity.runOnUiThread(() -> registerWithNotificationHubs());
                     if (user.isAdmin()) {
 
                         Toast.makeText(getApplicationContext(), "Admin Success", Toast.LENGTH_LONG);
@@ -69,11 +84,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void login(String username , String password, CallBack<JSONObject> responseCallBack)
+    private void login(String username , String password, CallBack<User> responseCallBack)
     {
         Pair <String , Object> pair1 = new Pair<>("userName",username);
         Pair <String , Object> pair2 = new Pair<>("password",password);
-        httpConnection.send(Services.auth,"login",responseCallBack , JSONObject.class , null , pair1, pair2);
+        httpConnection.send(Services.auth,"login",responseCallBack , User.class , null , pair1, pair2);
+    }
+
+    public void registerWithNotificationHubs()
+    {
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with FCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported by Google Play Services.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
 
