@@ -3,19 +3,17 @@ package nok.easy2m.activities;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import android.os.Build;
+
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -37,23 +35,13 @@ public class companiesListActivity extends ListActivity
     SharedPreferences pref;
     long workerId;
     boolean isAdmin;
-    String[] itemname ={
-            "Safari",
-            "Camera",
-            "Global",
-            "FireFox",
-            "UC Browser",
-            "Android Folder",
-            "VLC Player",
-            "Cold War"
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_companies_list);
         pref = getSharedPreferences("label" , 0);
         workerId = pref.getLong("userId" , -1);
-        isAdmin = pref.getBoolean("admin",false);
+        isAdmin = pref.getBoolean("admin",true);
         httpConnection = HttpConnection.getInstance(this);
 
         List<Company> companies = new ArrayList<>();
@@ -67,13 +55,15 @@ public class companiesListActivity extends ListActivity
         };
 //        getCompanies(respCallBack);
         //@TODO:
-        Company c = new Company();
-        c.setId(1);
-        c.setName("easy2m");
-        c.setOwnerID(1);
-        c.setDescription("Nice Company");
-        c.setLogoUrl(null);
-        companies.add(c);
+        if(isAdmin) {
+            Company c = new Company();
+            c.setId(-1);
+            c.setName("Add your Company");
+            c.setOwnerID(-1);
+            c.setDescription("Add your company to the system and start work with us");
+            c.setLogoUrl("PLUS");
+            companies.add(c);
+        }
         setListAdapter(new CompanyAdapter(this,R.layout.mylist,companies));
         getListView().setLongClickable(true);
         getListView().setOnItemLongClickListener((adapterView, view, position, l) ->
@@ -95,7 +85,12 @@ public class companiesListActivity extends ListActivity
     protected void onListItemClick(ListView l, View v, int position, long id)
     {
         //TODO
+        Company item = (Company)l.getAdapter().getItem(position);
         Toast.makeText(getApplicationContext(), "TODO: Go to company activity", Toast.LENGTH_LONG).show();
+        if(item.getId() == -1)
+        {
+            //TODO : Add company activity.
+        }
         super.onListItemClick(l, v, position, id);
     }
 

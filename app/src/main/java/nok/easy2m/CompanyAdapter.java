@@ -50,7 +50,13 @@ public class CompanyAdapter extends ArrayAdapter<Company>
         title.setText(item.getName());
         if(item.getLogoUrl() != null)
         {
-            //TODO: Load image from Azure Blobs.
+            if(item.getLogoUrl().equals("PLUS"))
+            {
+                logo.setImageResource(R.mipmap.add_icon_round);
+            }
+            else {
+                //TODO: Load image from Azure Blobs.
+            }
         }
         return rowView;
     }
