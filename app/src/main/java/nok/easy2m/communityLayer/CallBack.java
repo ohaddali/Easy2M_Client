@@ -1,4 +1,4 @@
-package nok.easy2m;
+package nok.easy2m.communityLayer;
 
 /**
  * Created by naordalal on 19/02/2018.
