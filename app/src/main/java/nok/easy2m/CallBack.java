@@ -6,5 +6,5 @@ package nok.easy2m;
 
 public interface CallBack<T>
 {
-    public void execute(T ... objects);
+    public void execute(T objects);
 }
