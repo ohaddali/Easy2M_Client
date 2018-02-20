@@ -2,6 +2,7 @@ package nok.easy2m.communityLayer;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.Pair;
 
 import com.android.volley.RequestQueue;
@@ -60,6 +61,7 @@ public class HttpConnection
         CustomRequest<T,JSONObject> customRequest = new CustomRequest<>(url, classType , headers , param,
                 response -> responseCallBack.execute(response),
                 error -> {
+                    Log.d("Test", "send: "+error);
                     if(errorResponseCallBack != null)
                         errorResponseCallBack.execute(error);
                 });

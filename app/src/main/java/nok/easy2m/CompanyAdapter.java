@@ -60,4 +60,6 @@ public class CompanyAdapter extends ArrayAdapter<Company>
         }
         return rowView;
     }
+
+
 }
