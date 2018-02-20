@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "909006563096",
+    "firebase_url": "https://easy2m-d8f9a.firebaseio.com",
+    "project_id": "easy2m-d8f9a",
+    "storage_bucket": "easy2m-d8f9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909006563096:android:eca71952ef7e076b",
+        "android_client_info": {
+          "package_name": "nok.easy2m"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909006563096-b7h7liuo31hn2feqt4s2d8362tkhbpha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRpitaaWjYrw-wtjpu1yenDybtWrU4PeE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
