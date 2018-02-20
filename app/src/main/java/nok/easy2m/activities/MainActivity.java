@@ -1,6 +1,7 @@
 package nok.easy2m.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         usernameText = findViewById(R.id.usernameText);
         passwordText = findViewById(R.id.passwordText);
         loginBtn.setOnClickListener(this);
+
+        Intent i = getIntent();
+        String str = i.getStringExtra("username");
+        if(str != null)
+            usernameText.setText(str);
     }
 
     @Override
@@ -66,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             };
             login(username, password, responseCallBack);
+        }
+        else if(view.getId() == registerBtn.getId())
+        {
+            Intent regIntent = new Intent(this,RegisterActivity.class);
+            regIntent.putExtra("adminRegister",true);
+            startActivity(regIntent);
+            finish();
         }
     }
 

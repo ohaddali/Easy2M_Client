@@ -1,6 +1,7 @@
 package nok.easy2m.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -23,7 +24,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     TextView phoneTxt;
     TextView birthdateTxt;
     Button registerBtn;
-    boolean workerRegister;
+    Button backBtn;
+    boolean adminRegister;
     HttpConnection httpConnection;
     String invitationToken;
     @Override
@@ -37,31 +39,44 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         fullnameTxt = findViewById(R.id.fullnameTxt);
         phoneTxt = findViewById(R.id.phoneTxt);
         birthdateTxt = findViewById(R.id.usernameText);
-        registerBtn = findViewById(R.id.registerBtn);
-
+        registerBtn = findViewById(R.id.registerBtn2);
+        backBtn = findViewById(R.id.regBackBtn);
         registerBtn.setOnClickListener(this);
+        Intent i = getIntent();
+        adminRegister = i.getBooleanExtra("adminRegister",false);
     }
 
     @Override
     public void onClick(View view)
     {
-        httpConnection = HttpConnection.getInstance(getApplicationContext());
+        if(view.getId() == registerBtn.getId()) {
+            httpConnection = HttpConnection.getInstance(getApplicationContext());
 
-        String username = usernameTxt.getText().toString();
-        String password = passwordTxt.getText().toString();
-        String fullName = fullnameTxt.getText().toString();
-        String phone = phoneTxt.getText().toString();
-        String birthdate = birthdateTxt.getText().toString();
-        Activity activity = this;
-        CallBack<Boolean> responseCallBack = (resp) ->
+            String username = usernameTxt.getText().toString();
+            String password = passwordTxt.getText().toString();
+            String fullName = fullnameTxt.getText().toString();
+            String phone = phoneTxt.getText().toString();
+            String birthdate = birthdateTxt.getText().toString();
+            Activity activity = this;
+            CallBack<Boolean> responseCallBack = (resp) ->
+            {
+                if (resp) {
+                    Intent loginIntent = new Intent(this, MainActivity.class);
+                    loginIntent.putExtra("username", usernameTxt.getText().toString());
+                    startActivity(loginIntent);
+                    finish();
+                } else
+                    activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG).show());
+            };
+
+            register(username, password, fullName, birthdate, phone, adminRegister, responseCallBack);
+        }
+        else if(view.getId() == backBtn.getId())
         {
-            if(resp);
-                //To add Company Activity.
-            else
-                activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG).show());
-        };
-
-        register(username,password,fullName,birthdate ,phone ,workerRegister,responseCallBack);
+            Intent loginIntent = new Intent(this, MainActivity.class);
+            startActivity(loginIntent);
+            finish();
+        }
 
     }
 

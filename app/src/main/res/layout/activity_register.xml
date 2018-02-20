@@ -131,7 +131,7 @@
         tools:textSize="30sp" />
 
     <Button
-        android:id="@+id/registerBtn"
+        android:id="@+id/registerBtn2"
         android:layout_width="134dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -139,5 +139,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/regBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=">"
+        tools:layout_editor_absoluteX="295dp"
+        tools:layout_editor_absoluteY="2dp" />
 
 </android.support.constraint.ConstraintLayout>
