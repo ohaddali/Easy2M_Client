@@ -65,15 +65,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Activity activity = this;
             CallBack<User> responseCallBack = (user) ->
             {
-                if (user.isLoggedIn())
-                {
+                if (user.isLoggedIn()) {
+                  
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putLong("userId" , user.getId());
+                    editor.putBoolean("admin" , user.isAdmin());
+                    editor.commit();
                     activity.runOnUiThread(() -> registerWithNotificationHubs());
-                    if (user.isAdmin()) {
+                    Intent intent = new Intent(activity , companiesListActivity.class);
+                    activity.runOnUiThread(() -> startActivity(intent));
 
-                        Toast.makeText(getApplicationContext(), "Admin Success", Toast.LENGTH_LONG);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Worker Success", Toast.LENGTH_LONG);
-                    }
                 } else {
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "username or password is incorrect", Toast.LENGTH_LONG).show());
                 }
@@ -81,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             login(username, password, responseCallBack);
         }
     }
-
-
     private void login(String username , String password, CallBack<User> responseCallBack)
     {
         Pair <String , Object> pair1 = new Pair<>("userName",username);

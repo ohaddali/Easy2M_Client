@@ -1,6 +1,7 @@
 package nok.easy2m.activities;
 
 
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 
@@ -9,14 +10,20 @@ import android.content.SharedPreferences;
 
 
 import android.os.Bundle;
+
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.Toolbar;
+
+
+import com.android.volley.VolleyError;
 
 
 import java.util.ArrayList;
@@ -35,6 +42,7 @@ public class companiesListActivity extends ListActivity
     SharedPreferences pref;
     long workerId;
     boolean isAdmin;
+    RelativeLayout progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,27 +51,37 @@ public class companiesListActivity extends ListActivity
         workerId = pref.getLong("userId" , -1);
         isAdmin = pref.getBoolean("admin",true);
         httpConnection = HttpConnection.getInstance(this);
-
+        progressBar = findViewById(R.id.loadingPanel);
         List<Company> companies = new ArrayList<>();
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setActionBar(toolbar);
-
+        ListActivity activity = this;
         CallBack<Company[]> respCallBack = (response) ->
         {
             for(Company company : response)
                 companies.add(company);
+            if(isAdmin) {
+                Company c = new Company();
+                c.setId(-1);
+                c.setName("Add your Company");
+                c.setOwnerID(-1);
+                c.setDescription("Add your company to the system and start work with us");
+                c.setLogoUrl("PLUS");
+                companies.add(c);
+            }
+            activity.runOnUiThread(()-> ((CompanyAdapter)getListAdapter()).notifyDataSetChanged());
+            activity.runOnUiThread(() -> progressBar.setVisibility(View.GONE));
         };
-//        getCompanies(respCallBack);
+
+        CallBack<VolleyError> errorCallBack =(error) ->
+        {
+            activity.runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+            activity.runOnUiThread(() -> Toast.makeText(activity, "Somthing went wrong, Try to login again", Toast.LENGTH_LONG).show());
+        };
+
+        progressBar.setVisibility(View.VISIBLE);
+        getCompanies(respCallBack,errorCallBack);
         //@TODO:
-        if(isAdmin) {
-            Company c = new Company();
-            c.setId(-1);
-            c.setName("Add your Company");
-            c.setOwnerID(-1);
-            c.setDescription("Add your company to the system and start work with us");
-            c.setLogoUrl("PLUS");
-            companies.add(c);
-        }
         setListAdapter(new CompanyAdapter(this,R.layout.mylist,companies));
         getListView().setLongClickable(true);
         getListView().setOnItemLongClickListener((adapterView, view, position, l) ->
@@ -89,9 +107,18 @@ public class companiesListActivity extends ListActivity
         Toast.makeText(getApplicationContext(), "TODO: Go to company activity", Toast.LENGTH_LONG).show();
         if(item.getId() == -1)
         {
-            //TODO : Add company activity.
+            Intent i = new Intent(this,AddCompanyActivity.class);
+            this.runOnUiThread(() -> startActivity(i));
         }
         super.onListItemClick(l, v, position, id);
+    }
+
+    private void getCompanies(CallBack<Company[]> respCallBack, CallBack<VolleyError> errorCallBack)
+    {
+
+        Pair<String, Object> pair1 = new Pair<>("workerId", workerId);
+        httpConnection.send(Services.companiesService,"getWorkerCompanies"
+                ,respCallBack, Company[].class,errorCallBack,pair1);
     }
 
 
@@ -119,11 +146,5 @@ public class companiesListActivity extends ListActivity
         return true;
     }
 
-
-    private void getCompanies(CallBack<Company[]> respCallBack)
-    {
-        Pair<String, Object> pair1 = new Pair<>("workerId", workerId);
-        httpConnection.send(Services.companiesService,"getWorkerCompanies",respCallBack, Company[].class,null,pair1);
-    }
 
 }

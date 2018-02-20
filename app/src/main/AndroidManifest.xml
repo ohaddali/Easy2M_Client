@@ -39,6 +39,7 @@
             </intent-filter>
         </activity>
 
+
         <service android:name=".MyInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -59,6 +60,13 @@
         </receiver>
 
         <activity android:name=".activities.AddWorkersActivity"></activity>
+
+        <activity android:name=".activities.RegisterActivity" />
+        <activity
+            android:name=".activities.companiesListActivity"
+            android:exported="true"></activity>
+        <activity android:name=".activities.AddCompanyActivity"></activity>
+
     </application>
 
 </manifest>
