@@ -1,6 +1,7 @@
 package nok.easy2m.activities;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 
@@ -89,7 +90,8 @@ public class companiesListActivity extends ListActivity
         Toast.makeText(getApplicationContext(), "TODO: Go to company activity", Toast.LENGTH_LONG).show();
         if(item.getId() == -1)
         {
-            //TODO : Add company activity.
+            Intent i = new Intent(this,AddCompanyActivity.class);
+            this.runOnUiThread(() -> startActivity(i));
         }
         super.onListItemClick(l, v, position, id);
     }
