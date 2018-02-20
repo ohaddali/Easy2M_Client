@@ -64,11 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     editor.putLong("userId" , user.getId());
                     editor.putBoolean("admin" , user.isAdmin());
                     editor.commit();
-                    /*if (user.isAdmin()) {
-                        Toast.makeText(getApplicationContext(), "Admin Success", Toast.LENGTH_LONG);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Worker Success", Toast.LENGTH_LONG);
-                    }*/
+
                     Intent intent = new Intent(activity , companiesListActivity.class);
                     activity.runOnUiThread(() -> startActivity(intent));
                 } else {
