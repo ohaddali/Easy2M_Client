@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.RegisterActivity"></activity>
-        <activity android:name=".activities.companiesListActivity"></activity>
+        <activity android:name=".activities.companiesListActivity" android:exported="true"
+        >
+        </activity>
     </application>
 
 </manifest>
