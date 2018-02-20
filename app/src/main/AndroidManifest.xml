@@ -22,7 +22,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,7 +58,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".AddWorkersActivity"></activity>
+        <activity android:name=".activities.AddWorkersActivity"></activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import nok.easy2m.activities.*;
 import nok.easy2m.R;
 import nok.easy2m.communityLayer.CallBack;
 import nok.easy2m.communityLayer.HttpConnection;

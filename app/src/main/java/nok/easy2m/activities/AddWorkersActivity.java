@@ -1,6 +1,5 @@
-package nok.easy2m;
+package nok.easy2m.activities;
 
-import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,12 +8,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import java.util.List;
+
+import nok.easy2m.*;
+import nok.easy2m.R;
 
 public class AddWorkersActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class AddWorkersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_workers);
+        setContentView(nok.easy2m.R.layout.activity_add_workers);
 
         new MultiContactPicker.Builder(AddWorkersActivity.this) //Activity/fragment context
                 .theme(R.style.MultiContactPicker_Azure)

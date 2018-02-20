@@ -1,12 +1,7 @@
-package nok.easy2m;
+package nok.easy2m.activities;
 
-import android.*;
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +15,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 
+import nok.easy2m.*;
+import nok.easy2m.R;
+import nok.easy2m.communityLayer.CallBack;
+import nok.easy2m.communityLayer.HttpConnection;
 import nok.easy2m.models.Services;
 import nok.easy2m.models.User;
 
