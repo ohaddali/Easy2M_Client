@@ -12,6 +12,7 @@ import nok.easy2m.communityLayer.SerializableObject;
 public class User implements SerializableObject
 {
 
+    private long id;
     private boolean loggedIn;
     private String username;
     private boolean admin;
@@ -85,5 +86,13 @@ public class User implements SerializableObject
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

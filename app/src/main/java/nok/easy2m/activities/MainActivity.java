@@ -2,6 +2,7 @@ package nok.easy2m.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView usernameText;
     TextView passwordText;
     HttpConnection httpConnection;
-
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         usernameText = findViewById(R.id.usernameText);
         passwordText = findViewById(R.id.passwordText);
         loginBtn.setOnClickListener(this);
+        pref = getSharedPreferences("label" , 0);
+
 
         Intent i = getIntent();
         String str = i.getStringExtra("username");
@@ -54,19 +57,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String username = usernameText.getText().toString();
             String password = usernameText.getText().toString();
             Activity activity = this;
-            CallBack<JSONObject> responseCallBack = (JSONObject) ->
+            CallBack<User> responseCallBack = (user) ->
             {
-
-                User user = new User();
-                user.fromJSONObject(JSONObject);
-
                 if (user.isLoggedIn()) {
-                    if (user.isAdmin()) {
-
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putLong("userId" , user.getId());
+                    editor.putBoolean("admin" , user.isAdmin());
+                    editor.commit();
+                    /*if (user.isAdmin()) {
                         Toast.makeText(getApplicationContext(), "Admin Success", Toast.LENGTH_LONG);
                     } else {
                         Toast.makeText(getApplicationContext(), "Worker Success", Toast.LENGTH_LONG);
-                    }
+                    }*/
+                    Intent intent = new Intent(activity , companiesListActivity.class);
+                    activity.runOnUiThread(() -> startActivity(intent));
                 } else {
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "username or password is incorrect", Toast.LENGTH_LONG).show());
                 }
@@ -83,11 +87,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void login(String username , String password, CallBack<JSONObject> responseCallBack)
+    private void login(String username , String password, CallBack<User> responseCallBack)
     {
         Pair <String , Object> pair1 = new Pair<>("userName",username);
         Pair <String , Object> pair2 = new Pair<>("password",password);
-        httpConnection.send(Services.auth,"login",responseCallBack , JSONObject.class , null , pair1, pair2);
+        httpConnection.send(Services.auth,"login",responseCallBack , User.class , null , pair1, pair2);
     }
 
 
