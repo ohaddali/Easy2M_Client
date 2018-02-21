@@ -8,9 +8,12 @@ import android.content.pm.PackageManager;
 
 public class Globals
 {
+    public static String addRole = "addNewRole";
 
     public static String companiesImagesContainer = "images";
 
+
+    public static String imagesBlobUrl ="https://nokstorage.blob.core.windows.net/images/";
 
     public static final int READ_CONTACTS = 1;
     public static final int SEND_SMS = 2;

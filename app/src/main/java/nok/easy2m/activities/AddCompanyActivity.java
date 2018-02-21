@@ -32,6 +32,9 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,6 +45,7 @@ import nok.easy2m.Globals;
 import nok.easy2m.R;
 import nok.easy2m.communityLayer.CallBack;
 import nok.easy2m.communityLayer.HttpConnection;
+import nok.easy2m.communityLayer.SerializableObject;
 import nok.easy2m.models.Company;
 import nok.easy2m.models.Services;
 
@@ -70,6 +74,7 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
         companyDesc = findViewById(R.id.compantDescTxt);
         doneBtn = findViewById(R.id.addCompanyBtn);
         companyImg.setOnClickListener(this);
+        doneBtn.setOnClickListener(this);
         comapnyBitmap = null;
         pref = getSharedPreferences("label" , 0);
         workerId = pref.getLong("userId" , -1);
@@ -112,17 +117,24 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
         else if(v.getId() == doneBtn.getId())
         {
 
-            CallBack<Boolean> response = objects ->
+            CallBack<Company> response = (comp) ->
             {
-                this.runOnUiThread(() -> progressBar.setVisibility(View.GONE));
-                Intent intent = new Intent(activity,AddWorkersActivity.class);
-                startActivity(intent);
-                activity.finish();
+                runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                if(comp.getId()==-1)
+                {
+                    runOnUiThread(() -> Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show());
+                }
+                else {
+                    Intent intent = new Intent(activity, AddRolesActivity.class);
+                    intent.putExtra("companyId", comp.getId());
+                    startActivity(intent);
+                    activity.finish();
+                }
             };
             CallBack<VolleyError> errorCallBack = objects ->
             {
-                this.runOnUiThread(() -> progressBar.setVisibility(View.GONE));
-                this.runOnUiThread(() -> Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show());
+                runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                runOnUiThread(() -> Toast.makeText(activity, "Error:Something went wrong", Toast.LENGTH_LONG).show());
             };
 
             addCompany(response,errorCallBack);
@@ -150,7 +162,7 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    private void addCompany(CallBack<Boolean> respCallback , CallBack<VolleyError> errorCallBack)
+    private void addCompany(CallBack<Company> respCallback , CallBack<VolleyError> errorCallBack)
     {
 
         progressBar.setVisibility(View.VISIBLE);
@@ -163,19 +175,23 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             comapnyBitmap.compress(Bitmap.CompressFormat.PNG,0,bos);
             ByteArrayInputStream bs = new ByteArrayInputStream(bos.toByteArray());
-            String URL;
-            try {
-                URL = AzureBlobsManager.UploadImage(bs,bs.available(),newCompany.getName(), Globals.companiesImagesContainer);
-            } catch (Exception e) {
-                e.printStackTrace();
-                URL ="";
-                Log.d("Test", "addCompany: Fail in upload image");
-            }
-            newCompany.setLogoUrl(URL);
+
+
+            AzureBlobsManager.UploadImage(bs,bs.available(),newCompany.getName(), Globals.companiesImagesContainer,
+                    URL -> {
+                        newCompany.setLogoUrl(URL);
+                        Pair<String,Object> pair1 = new Pair<>("newCompany", SerializableObject.toJSON(newCompany));
+                        httpConnection.send(Services.companiesService,"addCompany"
+                                ,respCallback,Company.class,errorCallBack,pair1);
+                    });
         }
-        Pair<String,Object> pair1 = new Pair<>("newCompany",newCompany);
-        httpConnection.send(Services.companiesService,"addCompany"
-                ,respCallback,Boolean.class,errorCallBack,pair1);
+        else {
+            newCompany.setLogoUrl("");
+            Pair<String, Object> pair1 = new Pair<>("newCompany", SerializableObject.toJSON(newCompany));
+            httpConnection.send(Services.companiesService, "addCompany"
+                    , respCallback, Company.class, errorCallBack, pair1);
+        }
+
     }
 
     private void scaleImage(ImageView view) throws NoSuchElementException {

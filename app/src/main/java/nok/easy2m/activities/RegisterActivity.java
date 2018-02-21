@@ -40,11 +40,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         passwordTxt = findViewById(R.id.passwordTxt2);
         fullnameTxt = findViewById(R.id.fullnameTxt);
         phoneTxt = findViewById(R.id.phoneTxt);
-        birthdateTxt = findViewById(R.id.usernameText);
+        birthdateTxt = findViewById(R.id.birthdateTxt);
         registerBtn = findViewById(R.id.registerBtn2);
         backBtn = findViewById(R.id.regBackBtn);
         registerBtn.setOnClickListener(this);
-
+        backBtn.setOnClickListener(this);
         Uri uri = getIntent().getData(); //get URI
         if(uri != null) //if we come from URI
         {
@@ -94,9 +94,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void register(String username , String password, String fullName, String birthdate ,String phone ,boolean admin,
                           CallBack<Boolean> responseCallBack)
     {
-        Pair<String , Object> pair1 = new Pair<>("userName",username);
+        Pair<String , Object> pair1 = new Pair<>("username",username);
         Pair <String , Object> pair2 = new Pair<>("password",password);
-        Pair <String , Object> pair3 = new Pair<>("fullName",fullName);
+        Pair <String , Object> pair3 = new Pair<>("fullname",fullName);
         Pair <String , Object> pair4 = new Pair<>("birthdate",birthdate);
         Pair <String , Object> pair5 = new Pair<>("phone",phone);
         Pair <String , Object> pair6 = new Pair<>("admin",admin);

@@ -16,15 +16,18 @@ import java.util.List;
 
 import nok.easy2m.*;
 import nok.easy2m.R;
+import nok.easy2m.communityLayer.SerializableObject;
+import nok.easy2m.models.Role;
 
 public class AddWorkersActivity extends AppCompatActivity {
 
     private static final int CONTACT_PICKER_REQUEST = 991;
+    Role[] roles;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(nok.easy2m.R.layout.activity_add_workers);
-
+        roles = SerializableObject.fromJSONObject(getIntent().getStringExtra("roles"),Role[].class);
         new MultiContactPicker.Builder(AddWorkersActivity.this) //Activity/fragment context
                 .theme(R.style.MultiContactPicker_Azure)
                 .hideScrollbar(false) //Optional - default: false

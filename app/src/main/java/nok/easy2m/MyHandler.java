@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import com.microsoft.windowsazure.notifications.NotificationsHandler;
 
-import nok.easy2m.MainActivity;
-import nok.easy2m.R;
+import nok.easy2m.activities.MainActivity;
+
 
 /**
  * Created by naordalal on 20/02/2018.

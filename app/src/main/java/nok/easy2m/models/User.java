@@ -9,7 +9,7 @@ import nok.easy2m.communityLayer.SerializableObject;
  * Created by pc on 2/19/2018.
  */
 
-public class User implements SerializableObject
+public class User
 {
 
     private long id;
@@ -72,21 +72,6 @@ public class User implements SerializableObject
         this.birthdate = birthdate;
     }
 
-
-    @Override
-    public void fromJSONObject(JSONObject jsonObject)
-    {
-        try {
-            loggedIn = jsonObject.getBoolean("loggedIn");;
-            username= jsonObject.getString("username");
-            admin = jsonObject.getBoolean("admin");
-            name =jsonObject.getString("name");
-            phoneNumber =jsonObject.getString("phoneNumber");
-            birthdate= jsonObject.getString("birthdate");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     public long getId() {
         return id;

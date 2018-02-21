@@ -39,7 +39,6 @@
             </intent-filter>
         </activity>
 
-
         <service android:name=".MyInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -47,7 +46,7 @@
         </service>
         <service
             android:name=".RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <receiver
             android:name="com.microsoft.windowsazure.notifications.NotificationsBroadcastReceiver"
@@ -59,14 +58,13 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.AddWorkersActivity"></activity>
-
+        <activity android:name=".activities.AddWorkersActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity
-            android:name=".activities.companiesListActivity"
+            android:name=".activities.companiesListActivity" />
+        <activity android:name=".activities.AddCompanyActivity" />
+        <activity android:name=".activities.AddRolesActivity"
             android:exported="true"></activity>
-        <activity android:name=".activities.AddCompanyActivity"></activity>
-
     </application>
 
 </manifest>
