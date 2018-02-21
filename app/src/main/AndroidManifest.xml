@@ -64,7 +64,10 @@
         <activity android:name=".activities.AddCompanyActivity" />
         <activity android:name=".activities.AddRolesActivity" />
         <activity android:name=".activities.TimeTableActivity" />
-        <activity android:name=".activities.ReportsActivity" android:exported="true"/>
+        <activity
+            android:name=".activities.ReportsActivity"
+            android:exported="true" />
+        <activity android:name=".activities.CompanyMenuActivity"></activity>
     </application>
 
 </manifest>
