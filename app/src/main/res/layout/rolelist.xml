@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:layoutDirection="rtl">
+
+    <Button
+        android:id="@+id/deleteRoleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="remove"/>
+
+
+    <Button
+        android:id="@+id/addRoleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD"/>
+
+
+
+    <EditText
+        android:id="@+id/roleNameTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

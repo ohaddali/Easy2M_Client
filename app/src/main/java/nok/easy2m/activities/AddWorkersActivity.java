@@ -18,22 +18,34 @@ import java.util.List;
 
 import nok.easy2m.*;
 import nok.easy2m.R;
+
+import nok.easy2m.communityLayer.SerializableObject;
+import nok.easy2m.models.Role;
+
 import nok.easy2m.communityLayer.CallBack;
 import nok.easy2m.communityLayer.HttpConnection;
+
 
 public class AddWorkersActivity extends AppCompatActivity {
 
     private static final int CONTACT_PICKER_REQUEST = 991;
+
+    Role[] roles;
+
     private HttpConnection httpConnection;
     private String company;
     private List<ContactResult> currentSelectedContacts;
     private long companyId;
     private long roleId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(nok.easy2m.R.layout.activity_add_workers);
+
+        roles = SerializableObject.fromJSONObject(getIntent().getStringExtra("roles"),Role[].class);
+
 
         company = getIntent().getStringExtra("company");
         companyId = getIntent().getLongExtra("companyId" , -1);
@@ -41,6 +53,7 @@ public class AddWorkersActivity extends AppCompatActivity {
         
         httpConnection = HttpConnection.getInstance(this);
         currentSelectedContacts = new ArrayList<>();
+
 
         new MultiContactPicker.Builder(AddWorkersActivity.this) //Activity/fragment context
                 .theme(R.style.MultiContactPicker_Azure)

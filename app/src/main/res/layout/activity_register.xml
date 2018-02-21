@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    tools:context="nok.easy2m.activities.RegisterActivity">
+    tools:context="nok.easy2m.activities.RegisterActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <EditText
         android:id="@+id/fullnameTxt"
@@ -13,11 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameTxt2" />
 
     <EditText
         android:id="@+id/usernameTxt2"
@@ -25,46 +27,42 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="117dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="47dp"
+        android:layout_height="20dp"
         android:text="FULL NAME:"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintBottom_toTopOf="@+id/fullnameTxt"
         app:layout_constraintStart_toStartOf="@+id/usernameTxt2"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameTxt2" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="46dp"
-        android:layout_marginTop="98dp"
         android:text="USERNAME:"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/usernameTxt2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/usernameTxt2"
+        app:layout_constraintStart_toStartOf="@+id/usernameTxt2" />
 
     <EditText
         android:id="@+id/passwordTxt2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/fullnameTxt" />
 
     <TextView
         android:id="@+id/textView4"
@@ -73,51 +71,55 @@
         android:text="PASSWORD:"
         app:layout_constraintBottom_toTopOf="@+id/passwordTxt2"
         app:layout_constraintStart_toStartOf="@+id/passwordTxt2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/fullnameTxt" />
 
     <EditText
         android:id="@+id/phoneTxt"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="61dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="65dp"
         android:ems="10"
         android:inputType="textPersonName|phone"
+        app:layout_constraintBottom_toBottomOf="@+id/birthdateTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="@+id/passwordTxt2" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="47dp"
         android:text="PHONE NUMBER:"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/phoneTxt"
+        app:layout_constraintBottom_toTopOf="@+id/phoneTxt"
+        app:layout_constraintStart_toStartOf="@+id/passwordTxt2"
         app:layout_constraintTop_toBottomOf="@+id/passwordTxt2" />
 
     <EditText
         android:id="@+id/birthdateTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="87dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="84dp"
         android:ems="10"
         android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordTxt2" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="133dp"
         android:text="BIRTHDATE:"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/birthdateTxt"
         app:layout_constraintStart_toStartOf="@+id/phoneTxt"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/phoneTxt" />
 
     <TextView
         android:id="@+id/registerLbl"
@@ -134,18 +136,20 @@
         android:id="@+id/registerBtn2"
         android:layout_width="134dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:text="REGISTER"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/birthdateTxt" />
 
     <Button
         android:id="@+id/regBackBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:layout_marginTop="2dp"
         android:text=">"
-        tools:layout_editor_absoluteX="295dp"
-        tools:layout_editor_absoluteY="2dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

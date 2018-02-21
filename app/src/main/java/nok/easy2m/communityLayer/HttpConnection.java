@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -74,12 +75,17 @@ public class HttpConnection
     private JSONObject getParamAsJsonFromArrayOfParams(Pair<String,Object>[] params)
     {
         Map<String,String> json = new HashMap<>();
+        JSONObject jsonObj = new JSONObject();
         for(Pair<String,Object> param : params)
         {
-            json.put(param.first , param.second.toString());
+            try {
+                jsonObj.put(param.first , param.second);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
-        return new JSONObject(json);
+        return jsonObj;
     }
 
     private Map<String,String> getParamAsMapFromArrayOfParams(Pair<String,Object>[] params)

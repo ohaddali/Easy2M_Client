@@ -51,11 +51,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         usernameText = findViewById(R.id.usernameText);
         passwordText = findViewById(R.id.passwordText);
         loginBtn.setOnClickListener(this);
+        registerBtn.setOnClickListener(this);
+        pref = getSharedPreferences("label",0);
+
+
+        //Intent intent = new Intent(this , AddWorkersActivity.class);
+        //startActivity(intent);
 
         pref = getSharedPreferences("label" , 0);
 
-        Intent intent = new Intent(this , TimeTableActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this , TimeTableActivity.class);
+        //startActivity(intent);
+
 
         NotificationsManager.handleNotifications(this, NotificationSettings.SenderId, MyHandler.class);
     }
@@ -66,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         httpConnection = HttpConnection.getInstance(getApplicationContext());
         if(view.getId() == loginBtn.getId()) {
             String username = usernameText.getText().toString();
-            String password = usernameText.getText().toString();
+            String password = passwordText.getText().toString();
             Activity activity = this;
             CallBack<User> responseCallBack = (user) ->
             {
@@ -78,13 +85,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     editor.commit();
                     activity.runOnUiThread(() -> registerWithNotificationHubs());
                     Intent intent = new Intent(activity , companiesListActivity.class);
-                    activity.runOnUiThread(() -> startActivity(intent));
+                    activity.runOnUiThread(() -> {startActivity(intent); activity.finish();});
 
                 } else {
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "username or password is incorrect", Toast.LENGTH_LONG).show());
                 }
             };
             login(username, password, responseCallBack);
+        }
+        else if(view.getId() == registerBtn.getId())
+        {
+            Intent intent = new Intent(this,RegisterActivity.class);
+            intent.putExtra("adminRegister",true);
+            startActivity(intent);
         }
     }
     private void login(String username , String password, CallBack<User> responseCallBack)

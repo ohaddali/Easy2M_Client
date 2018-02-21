@@ -2,6 +2,8 @@ package nok.easy2m;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,8 +14,12 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
+import nok.easy2m.communityLayer.CallBack;
 import nok.easy2m.models.Company;
 
 /**
@@ -55,7 +61,18 @@ public class CompanyAdapter extends ArrayAdapter<Company>
                 logo.setImageResource(R.mipmap.add_icon_round);
             }
             else {
-                //TODO: Load image from Azure Blobs.
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                CallBack<Boolean> callBack = (Boolean success) -> {
+                    if(success)
+                    {
+                        byte[] buffer = imageStream.toByteArray();
+
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
+                        context.runOnUiThread(() -> logo.setImageBitmap(bitmap));
+                    }
+                };
+
+                AzureBlobsManager.GetFile(item.getLogoUrl(),imageStream,Globals.companiesImagesContainer,callBack);
             }
         }
         return rowView;

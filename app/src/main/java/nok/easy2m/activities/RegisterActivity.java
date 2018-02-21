@@ -2,6 +2,7 @@ package nok.easy2m.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -39,10 +40,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         passwordTxt = findViewById(R.id.passwordTxt2);
         fullnameTxt = findViewById(R.id.fullnameTxt);
         phoneTxt = findViewById(R.id.phoneTxt);
-        birthdateTxt = findViewById(R.id.usernameText);
+        birthdateTxt = findViewById(R.id.birthdateTxt);
         registerBtn = findViewById(R.id.registerBtn2);
         backBtn = findViewById(R.id.regBackBtn);
         registerBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
+        Uri uri = getIntent().getData(); //get URI
+        if(uri != null) //if we come from URI
+        {
+            String key = "token";
+            invitationToken = uri.getQueryParameter(key); //get query parameter from URI s.t. get X for query ?X=Value
+        } //TODO : gets companyId and RoleId from the url.
+
         Intent i = getIntent();
         adminRegister = i.getBooleanExtra("adminRegister",false);
     }
@@ -70,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG).show());
             };
 
+
             register(username, password, fullName, birthdate, phone, adminRegister, responseCallBack);
         }
         else if(view.getId() == backBtn.getId())
@@ -84,9 +94,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void register(String username , String password, String fullName, String birthdate ,String phone ,boolean admin,
                           CallBack<Boolean> responseCallBack)
     {
-        Pair<String , Object> pair1 = new Pair<>("userName",username);
+        Pair<String , Object> pair1 = new Pair<>("username",username);
         Pair <String , Object> pair2 = new Pair<>("password",password);
-        Pair <String , Object> pair3 = new Pair<>("fullName",fullName);
+        Pair <String , Object> pair3 = new Pair<>("fullname",fullName);
         Pair <String , Object> pair4 = new Pair<>("birthdate",birthdate);
         Pair <String , Object> pair5 = new Pair<>("phone",phone);
         Pair <String , Object> pair6 = new Pair<>("admin",admin);
@@ -94,4 +104,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         httpConnection.send(Services.auth,"register",responseCallBack,Boolean.class, null,
                 pair1,pair2,pair3,pair4,pair5,pair6);
     }
+
 }
