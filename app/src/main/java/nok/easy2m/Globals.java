@@ -10,8 +10,8 @@ public class Globals
 {
     public static final int READ_CONTACTS = 1;
     public static final int SEND_SMS = 2;
-    private static boolean GetContactsAllow = false;
-    private static boolean SendSmsAllow = false;
+    public static boolean GetContactsAllow = false;
+    public static boolean SendSmsAllow = false;
 
     public static void onRequestPermissionsResult(int requestCode,
                                                   String permissions[], int[] grantResults)

@@ -2,6 +2,7 @@ package nok.easy2m.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     HttpConnection httpConnection;
     private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         passwordText = findViewById(R.id.passwordText);
         loginBtn.setOnClickListener(this);
 
-        Intent intent = new Intent(this , AddWorkersActivity.class);
+        pref = getSharedPreferences("label" , 0);
+
+        Intent intent = new Intent(this , TimeTableActivity.class);
         startActivity(intent);
+
         NotificationsManager.handleNotifications(this, NotificationSettings.SenderId, MyHandler.class);
     }
 
