@@ -60,11 +60,10 @@
 
         <activity android:name=".activities.AddWorkersActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity
-            android:name=".activities.companiesListActivity" />
+        <activity android:name=".activities.companiesListActivity" />
         <activity android:name=".activities.AddCompanyActivity" />
-        <activity android:name=".activities.AddRolesActivity"
-            android:exported="true"></activity>
+        <activity android:name=".activities.AddRolesActivity" />
+        <activity android:name=".activities.TimeTableActivity"></activity>
     </application>
 
 </manifest>

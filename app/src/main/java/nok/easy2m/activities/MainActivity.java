@@ -54,8 +54,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerBtn.setOnClickListener(this);
         pref = getSharedPreferences("label",0);
 
+
         //Intent intent = new Intent(this , AddWorkersActivity.class);
         //startActivity(intent);
+
+        pref = getSharedPreferences("label" , 0);
+
+        //Intent intent = new Intent(this , TimeTableActivity.class);
+        //startActivity(intent);
+
+
         NotificationsManager.handleNotifications(this, NotificationSettings.SenderId, MyHandler.class);
     }
 

@@ -24,13 +24,12 @@ public class RegistrationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences pref = getSharedPreferences("label", 0);
         String resultString = null;
         String regID = null;
         String storedToken = null;
 
         try {
-            SharedPreferences pref = getSharedPreferences("label", 0);
             long userId = pref.getLong("userId" , -1);
             if(userId == -1)
                 return;
@@ -41,7 +40,7 @@ public class RegistrationIntentService extends IntentService {
             // Storing the registration ID that indicates whether the generated token has been
             // sent to your server. If it is not stored, send the token to your server,
             // otherwise your server should have already received the token.
-            if (((regID=sharedPreferences.getString("registrationID", null)) == null)){
+            if (((regID=pref.getString("registrationID", null)) == null)){
 
                 NotificationHub hub = new NotificationHub(NotificationSettings.HubName,
                         NotificationSettings.HubListenConnectionString, this);
@@ -55,12 +54,12 @@ public class RegistrationIntentService extends IntentService {
                 resultString = "New NH Registration Successfully - RegId : " + regID;
                 Log.d(TAG, resultString);
 
-                sharedPreferences.edit().putString("registrationID", regID ).apply();
-                sharedPreferences.edit().putString("FCMtoken", FCM_token ).apply();
+                pref.edit().putString("registrationID", regID ).apply();
+                pref.edit().putString("FCMtoken", FCM_token ).apply();
             }
 
             // Check if the token may have been compromised and needs refreshing.
-            else if ((storedToken=sharedPreferences.getString("FCMtoken", "")) != FCM_token) {
+            else if ((storedToken=pref.getString("FCMtoken", "")) != FCM_token) {
 
                 NotificationHub hub = new NotificationHub(NotificationSettings.HubName,
                         NotificationSettings.HubListenConnectionString, this);
@@ -73,8 +72,8 @@ public class RegistrationIntentService extends IntentService {
                 resultString = "New NH Registration Successfully - RegId : " + regID;
                 Log.d(TAG, resultString);
 
-                sharedPreferences.edit().putString("registrationID", regID ).apply();
-                sharedPreferences.edit().putString("FCMtoken", FCM_token ).apply();
+                pref.edit().putString("registrationID", regID ).apply();
+                pref.edit().putString("FCMtoken", FCM_token ).apply();
             }
 
             else {
