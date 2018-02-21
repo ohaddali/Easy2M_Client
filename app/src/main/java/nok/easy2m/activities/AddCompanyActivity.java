@@ -1,6 +1,9 @@
 package nok.easy2m.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -11,36 +14,84 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.support.constraint.ConstraintLayout.LayoutParams;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import nok.easy2m.AzureBlobsManager;
+import nok.easy2m.Globals;
 import nok.easy2m.R;
+import nok.easy2m.communityLayer.CallBack;
+import nok.easy2m.communityLayer.HttpConnection;
+import nok.easy2m.models.Company;
+import nok.easy2m.models.Services;
 
 public class AddCompanyActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final int PICK_IMAGE_REQUEST = 1;
     ImageView companyImg;
-    TextView comapnyName;
+    TextView companyName;
     TextView companyDesc;
+    Button doneBtn;
+    HttpConnection httpConnection;
+    private SharedPreferences pref;
+    long workerId;
+    private boolean isAdmin;
+    Bitmap comapnyBitmap;
+    RelativeLayout progressBar;
+    Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_company);
-
+        httpConnection = HttpConnection.getInstance(this);
         companyImg = findViewById(R.id.companyImg);
-        comapnyName = findViewById(R.id.compnaynameTxt);
+        companyName = findViewById(R.id.compnaynameTxt);
         companyDesc = findViewById(R.id.compantDescTxt);
+        doneBtn = findViewById(R.id.addCompanyBtn);
         companyImg.setOnClickListener(this);
+        comapnyBitmap = null;
+        pref = getSharedPreferences("label" , 0);
+        workerId = pref.getLong("userId" , -1);
+        isAdmin = pref.getBoolean("admin",true);
+        progressBar = findViewById(R.id.loadingPanel2);
+        progressBar.setVisibility(View.GONE);
+        activity = this;
+
+        if(!isAdmin)
+        {
+            AlertDialog alertDialog = new AlertDialog.Builder(AddCompanyActivity.this).create();
+            alertDialog.setTitle("You are not an admin");
+            Activity activity = this;
+            alertDialog.setMessage("How did you get here?!");
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,"Back",
+                    (dialog, which) -> {
+                        dialog.dismiss();
+                        activity.finish();
+                    });
+            alertDialog.show();
+        }
+
     }
 
 
@@ -57,6 +108,25 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
         }
+
+        else if(v.getId() == doneBtn.getId())
+        {
+
+            CallBack<Boolean> response = objects ->
+            {
+                this.runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                Intent intent = new Intent(activity,AddWorkersActivity.class);
+                startActivity(intent);
+                activity.finish();
+            };
+            CallBack<VolleyError> errorCallBack = objects ->
+            {
+                this.runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                this.runOnUiThread(() -> Toast.makeText(activity, "Something went wrong", Toast.LENGTH_LONG).show());
+            };
+
+            addCompany(response,errorCallBack);
+        }
     }
 
     @Override
@@ -68,12 +138,44 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
             Uri uri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                comapnyBitmap = bitmap;
                 companyImg.setImageBitmap(bitmap);
                 scaleImage(companyImg);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+    }
+
+
+    private void addCompany(CallBack<Boolean> respCallback , CallBack<VolleyError> errorCallBack)
+    {
+
+        progressBar.setVisibility(View.VISIBLE);
+        Company newCompany = new Company();
+        newCompany.setOwnerID(workerId);
+        newCompany.setName(companyName.getText().toString());
+        newCompany.setDescription(companyDesc.getText().toString());
+        if(comapnyBitmap!=null)
+        {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            comapnyBitmap.compress(Bitmap.CompressFormat.PNG,0,bos);
+            ByteArrayInputStream bs = new ByteArrayInputStream(bos.toByteArray());
+            String URL;
+            try {
+                URL = AzureBlobsManager.UploadImage(bs,bs.available(),newCompany.getName(), Globals.companiesImagesContainer);
+            } catch (Exception e) {
+                e.printStackTrace();
+                URL ="";
+                Log.d("Test", "addCompany: Fail in upload image");
+            }
+            newCompany.setLogoUrl(URL);
+        }
+        Pair<String,Object> pair1 = new Pair<>("newCompany",newCompany);
+        httpConnection.send(Services.companiesService,"addCompany"
+                ,respCallback,Boolean.class,errorCallBack,pair1);
     }
 
     private void scaleImage(ImageView view) throws NoSuchElementException {

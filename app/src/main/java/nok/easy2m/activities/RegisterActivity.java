@@ -2,6 +2,7 @@ package nok.easy2m.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -43,6 +44,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         registerBtn = findViewById(R.id.registerBtn2);
         backBtn = findViewById(R.id.regBackBtn);
         registerBtn.setOnClickListener(this);
+
+        Uri uri = getIntent().getData(); //get URI
+        if(uri != null) //if we come from URI
+        {
+            String key = "token";
+            invitationToken = uri.getQueryParameter(key); //get query parameter from URI s.t. get X for query ?X=Value
+        } //TODO : gets companyId and RoleId from the url.
+
         Intent i = getIntent();
         adminRegister = i.getBooleanExtra("adminRegister",false);
     }
@@ -70,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG).show());
             };
 
+
             register(username, password, fullName, birthdate, phone, adminRegister, responseCallBack);
         }
         else if(view.getId() == backBtn.getId())
@@ -94,4 +104,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         httpConnection.send(Services.auth,"register",responseCallBack,Boolean.class, null,
                 pair1,pair2,pair3,pair4,pair5,pair6);
     }
+
 }

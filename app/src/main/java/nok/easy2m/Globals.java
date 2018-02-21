@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 
 public class Globals
 {
+
+    public static String companiesImagesContainer = "images";
+
+
     public static final int READ_CONTACTS = 1;
     public static final int SEND_SMS = 2;
     private static boolean GetContactsAllow = false;
