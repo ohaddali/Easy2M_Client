@@ -39,13 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*Uri uri = getIntent().getData(); //get URI
-        if(uri != null) //if we come from URI
-        {
-            String key = "";
-            String parameter = uri.getQueryParameter(key); //get query parameter from URI s.t. get X for query ?X=Value
-        }*/
-
         loginBtn = findViewById(R.id.loginBtn);
         registerBtn = findViewById(R.id.registerBtn);
         usernameText = findViewById(R.id.usernameText);
@@ -55,10 +48,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pref = getSharedPreferences("label",0);
 
 
-        //Intent intent = new Intent(this , AddWorkersActivity.class);
-        //startActivity(intent);
-
-        pref = getSharedPreferences("label" , 0);
+        /*Intent i = new Intent(this , ClockActivity.class);
+        long id = 5;
+        i.putExtra("companyId" , id);
+        //i.putExtra("companyName" , "hello");
+        //i.putExtra("roleId" , 1);
+        //i.putExtra("roleName" , "shef");
+        startActivity(i);*/
 
         //Intent intent = new Intent(this , TimeTableActivity.class);
         //startActivity(intent);

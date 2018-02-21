@@ -45,12 +45,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         backBtn = findViewById(R.id.regBackBtn);
         registerBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
+
+        invitationToken = null;
+
         Uri uri = getIntent().getData(); //get URI
         if(uri != null) //if we come from URI
         {
             String key = "token";
             invitationToken = uri.getQueryParameter(key); //get query parameter from URI s.t. get X for query ?X=Value
-        } //TODO : gets companyId and RoleId from the url.
+        }
 
         Intent i = getIntent();
         adminRegister = i.getBooleanExtra("adminRegister",false);
@@ -100,9 +103,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Pair <String , Object> pair4 = new Pair<>("birthdate",birthdate);
         Pair <String , Object> pair5 = new Pair<>("phone",phone);
         Pair <String , Object> pair6 = new Pair<>("admin",admin);
+        Pair <String , Object> pair7 = new Pair<>("token",invitationToken);
 
         httpConnection.send(Services.auth,"register",responseCallBack,Boolean.class, null,
-                pair1,pair2,pair3,pair4,pair5,pair6);
+                pair1,pair2,pair3,pair4,pair5,pair6,pair7);
     }
 
 }

@@ -27,15 +27,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="easy2m.com"
-                    android:scheme="http" />
             </intent-filter>
         </activity>
 
@@ -58,15 +49,27 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.AddWorkersActivity" />
+        <activity android:name=".activities.AddWorkersActivity">
+            <intent-filter>
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="easy2m.com"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.companiesListActivity" />
         <activity android:name=".activities.AddCompanyActivity" />
         <activity android:name=".activities.AddRolesActivity" />
         <activity android:name=".activities.TimeTableActivity" />
+        <activity android:name=".activities.ClockActivity"></activity>
         <activity
-            android:name=".activities.ReportsActivity"
-            android:exported="true" />
+            android:name=".activities.ReportsActivity"/>
         <activity android:name=".activities.CompanyMenuActivity"></activity>
     </application>
 

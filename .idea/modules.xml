@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Easy2M.iml" filepath="$PROJECT_DIR$/Easy2M.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Easy2M_Client.iml" filepath="$PROJECT_DIR$/Easy2M_Client.iml" />
       <module fileurl="file://C:\Users\pc\Desktop\ohad\Apps\Easy2M\Easy2M_Client.iml" filepath="C:\Users\pc\Desktop\ohad\Apps\Easy2M\Easy2M_Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
