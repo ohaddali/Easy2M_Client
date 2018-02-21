@@ -17,18 +17,14 @@ import java.util.Set;
 
 public class smsSender
 {
-    public void send(List<String> phoneNumbers , String sms)
+    public void send(String phoneNumber , String sms)
     {
 
         Thread t = new Thread(() -> {
             try
             {
-                Set<String> setPhones = new HashSet<String>(phoneNumbers);
-                for (String phoneNumber : setPhones)
-                {
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNumber , null , sms , null , null);
-                }
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNumber , null , sms , null , null);
             }catch(Exception e)
             {
                 e.printStackTrace();

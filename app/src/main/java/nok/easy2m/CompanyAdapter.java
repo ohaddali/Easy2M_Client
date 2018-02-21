@@ -43,7 +43,7 @@ public class CompanyAdapter extends ArrayAdapter<Company>
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
-        View rowView=inflater.inflate(R.layout.mylist, parent,false);
+        View rowView = inflater.inflate(R.layout.mylist, parent,false);
         TextView title = rowView.findViewById(R.id.company_name);
         ImageView logo = rowView.findViewById(R.id.company_logo);
         Company item = getItem(position);
