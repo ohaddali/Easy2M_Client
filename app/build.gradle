@@ -45,8 +45,4 @@ repositories {
         url "http://dl.bintray.com/microsoftazuremobile/SDK"
     }
 }
-
-
-
-
 apply plugin: 'com.google.gms.google-services'

@@ -104,7 +104,7 @@ public class companiesListActivity extends ListActivity
     {
         //TODO
         Company item = (Company)l.getAdapter().getItem(position);
-        Toast.makeText(getApplicationContext(), "TODO: Go to company activity", Toast.LENGTH_LONG).show();
+
         if(item.getId() == -1)
         {
             Intent i = new Intent(this,AddCompanyActivity.class);

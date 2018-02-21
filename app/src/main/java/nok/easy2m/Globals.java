@@ -11,7 +11,7 @@ public class Globals
     public static String addRole = "addNewRole";
 
     public static String companiesImagesContainer = "images";
-
+    public static String reportsContainer = "reports";
 
     public static String imagesBlobUrl ="https://nokstorage.blob.core.windows.net/images/";
 
