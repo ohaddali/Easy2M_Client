@@ -127,6 +127,7 @@ public class AddCompanyActivity extends AppCompatActivity implements View.OnClic
                 else {
                     Intent intent = new Intent(activity, AddRolesActivity.class);
                     intent.putExtra("companyId", comp.getId());
+                    intent.putExtra("companyName", comp.getName());
                     startActivity(intent);
                     activity.finish();
                 }

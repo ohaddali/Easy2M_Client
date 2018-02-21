@@ -1,6 +1,10 @@
 package nok.easy2m.activities;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
@@ -24,19 +29,19 @@ import nok.easy2m.models.Role;
 
 import nok.easy2m.communityLayer.CallBack;
 import nok.easy2m.communityLayer.HttpConnection;
+import nok.easy2m.models.Services;
 
 
 public class AddWorkersActivity extends AppCompatActivity {
 
     private static final int CONTACT_PICKER_REQUEST = 991;
 
-    Role[] roles;
-
     private HttpConnection httpConnection;
     private String company;
     private List<ContactResult> currentSelectedContacts;
     private long companyId;
     private long roleId;
+    private String roleName;
 
 
     @Override
@@ -44,13 +49,11 @@ public class AddWorkersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(nok.easy2m.R.layout.activity_add_workers);
 
-        roles = SerializableObject.fromJSONObject(getIntent().getStringExtra("roles"),Role[].class);
-
-
-        company = getIntent().getStringExtra("company");
+        company = getIntent().getStringExtra("companyName");
         companyId = getIntent().getLongExtra("companyId" , -1);
         roleId = getIntent().getLongExtra("roleId" , -1);
-        
+        roleName = getIntent().getStringExtra("roleName");
+
         httpConnection = HttpConnection.getInstance(this);
         currentSelectedContacts = new ArrayList<>();
 
@@ -64,14 +67,9 @@ public class AddWorkersActivity extends AppCompatActivity {
                 .bubbleColor(ContextCompat.getColor(AddWorkersActivity.this, R.color.colorPrimary)) //Optional - default: Azure Blue
                 .bubbleTextColor(Color.WHITE) //Optional - default: White
                 .showPickerForResult(CONTACT_PICKER_REQUEST);
-    }
 
-    private void requestReadContacts()
-    {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, Globals.READ_CONTACTS);
-        }
+        Toast.makeText(getApplicationContext(), "Please select workers for role: " + roleName, Toast.LENGTH_SHORT).show();
+
     }
 
     private void requestSendSms()
@@ -79,10 +77,21 @@ public class AddWorkersActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, Globals.SEND_SMS);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS}, Globals.SEND_SMS);
         }
         else
+        {
             sendSms(currentSelectedContacts);
+            done(roleId);
+        }
+    }
+
+    private void done(long roleId)
+    {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("roleId" , roleId);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     @Override
@@ -91,7 +100,12 @@ public class AddWorkersActivity extends AppCompatActivity {
     {
         Globals.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(Globals.SendSmsAllow)
+        {
             sendSms(currentSelectedContacts);
+            done(roleId);
+        }
+        else
+            done(-1);
     }
 
     @Override
@@ -104,10 +118,6 @@ public class AddWorkersActivity extends AppCompatActivity {
                 currentSelectedContacts.addAll(selectedContacts);
                 requestSendSms();
 
-                Intent intent = new Intent(this , companiesListActivity.class);
-                startActivity(intent);
-
-                finish();
             } else if(resultCode == RESULT_CANCELED){
                 System.out.println("User closed the picker without selecting items.");
             }
@@ -116,7 +126,6 @@ public class AddWorkersActivity extends AppCompatActivity {
 
     private void sendSms(List<ContactResult> selectedContacts)
     {
-        String serviceName = "companiesService";
         String methodName = "NotifyWorkerToJoinCompany";
 
         for(ContactResult contact : selectedContacts)
@@ -138,17 +147,18 @@ public class AddWorkersActivity extends AppCompatActivity {
 
             Pair<String,Object> param1 = new Pair<>("userPhone" , phoneNumber);
             Pair<String,Object> param2 = new Pair<>("companyId" , companyId);
-            httpConnection.send(serviceName,methodName,resCallBack,String.class , null , param1 , param2);
+            Pair<String,Object> param3 = new Pair<>("roleId" , roleId);
+            httpConnection.send(Services.companiesService,methodName,resCallBack,String.class , null , param1 , param2 , param3);
         }
 
     }
 
-    private String getMessageFromResponse(String token)
+    private String getMessageFromResponse(String url)
     {
-        String url = "http://easy2m.com?token=" + token;
+        //String url = "http://easy2m.com?token=" + token;
         String message = "";
 
-        message += "Hey,\n Company " + company + "invite you to join Easy2m application\n";
+        message += "Hey,\n Company " + company + " invite you to join Easy2m application as " + roleName +"\n";
         message += "Please click on the link provided\n";
         message += url +"\n\n";
         message += "Thank you, \n Easy2m";
