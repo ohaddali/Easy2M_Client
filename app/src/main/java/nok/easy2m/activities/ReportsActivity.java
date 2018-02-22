@@ -149,7 +149,7 @@ public class ReportsActivity extends ListActivity  {
                     //TODO : OPEN FILE
                 }
             };
-            AzureBlobsManager.GetFile(item.getUrl(),os,Globals.reportsContainer,callBack);
+            //AzureBlobsManager.GetFile(item.getUrl(),os,Globals.reportsContainer,callBack);
 
         }
     }
