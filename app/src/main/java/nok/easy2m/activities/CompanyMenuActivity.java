@@ -18,6 +18,8 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
     Button timetableBtn;
     TextView companyNameLbl;
     String companyName;
+    private long companyId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +31,7 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         companyNameLbl = findViewById(R.id.menu_companynameLbl);
 
         companyName = getIntent().getStringExtra("companyName");
+        companyId = getIntent().getLongExtra("companyId" , 0);
         companyNameLbl.setText(companyName);
 
         clockBtn.setOnClickListener(this);
@@ -41,8 +44,9 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         Intent i;
         if( v == clockBtn)
         {
-            //i = new Intent(this,ClockActivity.class)
-            //startActivity(i);
+            i = new Intent(this,ClockActivity.class);
+            i.putExtra("companyId" , companyId);
+            startActivity(i);
         }
         else if(v == reportsBtn)
         {
@@ -52,6 +56,7 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         else if(v == timetableBtn)
         {
             i = new Intent(this, TimeTableActivity.class);
+            i.putExtra("companyId" , companyId);
             startActivity(i);
         }
     }

@@ -110,6 +110,13 @@ public class companiesListActivity extends ListActivity
             Intent i = new Intent(this,AddCompanyActivity.class);
             this.runOnUiThread(() -> startActivity(i));
         }
+        else
+        {
+            Intent i = new Intent(this,CompanyMenuActivity.class);
+            i.putExtra("companyId" , item.getId());
+            i.putExtra("companyName" , item.getName());
+            this.runOnUiThread(() -> startActivity(i));
+        }
         super.onListItemClick(l, v, position, id);
     }
 

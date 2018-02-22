@@ -74,6 +74,7 @@ public class ReportsActivity extends ListActivity  {
                 Report rep = new Report();
                 rep.setReportId(-30);
                 reports.add(rep);
+                runOnUiThread(() -> ((ReportAdapter)getListAdapter()).notifyDataSetChanged());
             }
             progressBar.setVisibility(View.GONE);
         };
@@ -92,12 +93,14 @@ public class ReportsActivity extends ListActivity  {
         progressBar.setVisibility(View.VISIBLE);
         Pair<String,Object> pair1 = new Pair<>("workerId",workerId);
 
-        /*httpConnection.send(Services.reports,"getWorkerReports",response,Report[].class,
-                error -> runOnUiThread(() -> progressBar.setVisibility(View.GONE)),
-                pair1);*/
+        httpConnection.send(Services.reports,"getWorkerReports",response,Report[].class,
+                error -> runOnUiThread(() -> {
+                            Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);}),
+                pair1);
 
         Report[] stam = new Report[1];
-        response.execute(stam);
+        //response.execute(stam);
     }
 
 
@@ -154,11 +157,11 @@ public class ReportsActivity extends ListActivity  {
     private void exportReport(String date)
     {
         Pair<String,Object> pair1 = new Pair<>("userId",workerId);
-        Pair<String,Object> pair2 = new Pair<>("dateStr",date);
+        Pair<String,Object> pair2 = new Pair<>("date",date);
         CallBack<Boolean> resp = x->
                 runOnUiThread(()-> Toast.makeText(this, "The request for report in date " +date+" is on the way!", Toast.LENGTH_LONG).show());
         CallBack<VolleyError> err = error -> runOnUiThread(()-> Toast.makeText(this, "Error in request!", Toast.LENGTH_LONG).show());
-        //httpConnection.send(Services.reports,"exportWeeklyReportForWorker",resp,Boolean.class,err,pair1,pair2);
+        httpConnection.send(Services.reports,"exportWeeklyReportForWorker",resp,Boolean.class,err,pair1,pair2);
         //runOnUiThread(()-> Toast.makeText(this, "The request for report in date" +date+" is on the way!", Toast.LENGTH_LONG).show());
 
     }

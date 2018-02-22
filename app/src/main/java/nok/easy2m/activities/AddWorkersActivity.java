@@ -158,7 +158,7 @@ public class AddWorkersActivity extends AppCompatActivity {
         //String url = "http://easy2m.com?token=" + token;
         String message = "";
 
-        message += "Hey,\n Company " + company + " invite you to join Easy2m application as " + roleName +"\n";
+        message += "Hey,\nCompany " + company + " invite you to join Easy2m application as " + roleName +"\n";
         message += "Please click on the link provided\n";
         message += url +"\n\n";
         message += "Thank you, \n Easy2m";
