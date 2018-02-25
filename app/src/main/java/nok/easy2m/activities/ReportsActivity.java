@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -147,7 +148,7 @@ public class ReportsActivity extends ListActivity  {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
             chosenItem = item;
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, Globals.WRITE_EXTERNAL_STORAGE_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, Globals.WRITE_EXTERNAL_STORAGE_CODE);
         }
         else
             downloadFile(item);
@@ -178,9 +179,9 @@ public class ReportsActivity extends ListActivity  {
             e.printStackTrace();
         }
 
-
-        Uri fileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".my.package.name.provider", file);
-        NotificationManager manager = new NotificationManager(getApplicationContext() , fileUri , item.getUrl());
+        Context context = getApplicationContext();
+        Uri fileUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".my.package.name.provider", file);
+        NotificationManager manager = new NotificationManager(getApplicationContext() , fileUri , item.getDate());
         CallBack<Boolean> callBack = (success) ->
         {
             if(success)
