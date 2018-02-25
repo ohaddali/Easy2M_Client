@@ -55,6 +55,7 @@ public class ReportsActivity extends ListActivity  {
     SharedPreferences pref;
     long workerId;
     boolean isAdmin;
+    long companyId;
     RelativeLayout progressBar;
     DatePickerDialog dialog;
     SimpleDateFormat dateFormatter;
@@ -68,6 +69,7 @@ public class ReportsActivity extends ListActivity  {
 
         pref = getSharedPreferences("label" , 0);
         workerId = pref.getLong("userId" , -1);
+        companyId = pref.getLong("companyId",-1);
         isAdmin = pref.getBoolean("admin",false);
         httpConnection = HttpConnection.getInstance(this);
         progressBar = findViewById(R.id.loadingPanel);
@@ -94,7 +96,7 @@ public class ReportsActivity extends ListActivity  {
             getAllWorkerReports(workerId,response);
         else 
         {
-            getAllAdminReports();
+            getAllAdminReports(companyId,response);
         }
 
         setListAdapter(new ReportAdapter(this,R.layout.report_list,reports));
@@ -104,12 +106,12 @@ public class ReportsActivity extends ListActivity  {
     {
         progressBar.setVisibility(View.VISIBLE);
         Pair<String,Object> pair1 = new Pair<>("workerId",workerId);
-
+        Pair<String,Object> pair2 = new Pair<>("companyId",companyId);
         httpConnection.send(Services.reports,"getWorkerReports",response,Report[].class,
                 error -> runOnUiThread(() -> {
                             Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);}),
-                pair1);
+                pair1,pair2);
 
         Report[] stam = new Report[1];
         //response.execute(stam);
@@ -126,14 +128,11 @@ public class ReportsActivity extends ListActivity  {
         if(item.getReportId()==-30)
         {
             Calendar c = Calendar.getInstance();
-            dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    Calendar newDate = Calendar.getInstance();
-                    newDate.set(year, month, dayOfMonth,0,0,0);
-                    newDate.add(Calendar.DAY_OF_WEEK , -(newDate.get(Calendar.DAY_OF_WEEK) - 1));
-                    exportReport(dateFormatter.format(newDate.getTime()));
-                }
+            dialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, month, dayOfMonth,0,0,0);
+                newDate.add(Calendar.DAY_OF_WEEK , -(newDate.get(Calendar.DAY_OF_WEEK) - 1));
+                exportReport(dateFormatter.format(newDate.getTime()));
             },c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH));
             dialog.show();
         }
@@ -214,15 +213,24 @@ public class ReportsActivity extends ListActivity  {
     {
         Pair<String,Object> pair1 = new Pair<>("userId",workerId);
         Pair<String,Object> pair2 = new Pair<>("date",date);
+        Pair<String,Object> pair3 = new Pair<>("companyId",companyId);
         CallBack<Boolean> resp = x->
                 runOnUiThread(()-> Toast.makeText(this, "The request for report in date " +date+" is on the way!", Toast.LENGTH_LONG).show());
         CallBack<VolleyError> err = error -> runOnUiThread(()-> Toast.makeText(this, "Error in request!", Toast.LENGTH_LONG).show());
-        httpConnection.send(Services.reports,"exportWeeklyReportForWorker",resp,Boolean.class,err,pair1,pair2);
+        httpConnection.send(Services.reports,"exportWeeklyReportForWorker",resp,Boolean.class,err,pair1,pair2,pair3);
         //runOnUiThread(()-> Toast.makeText(this, "The request for report in date" +date+" is on the way!", Toast.LENGTH_LONG).show());
 
     }
 
-    private void getAllAdminReports()
+    private void getAllAdminReports(long companyId, CallBack<Report[]> response)
     {
+        progressBar.setVisibility(View.VISIBLE);
+        Pair<String,Object> pair1 = new Pair<>("companyId",companyId);
+
+        httpConnection.send(Services.reports,"getAdminReports",response,Report[].class,
+                error -> runOnUiThread(() -> {
+                    Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);}),
+                pair1);
     }
 }
