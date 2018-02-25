@@ -74,14 +74,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CallBack<User> responseCallBack = (user) ->
             {
                 if (user.isLoggedIn()) {
-                  
+
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putLong("userId" , user.getId());
                     editor.putBoolean("admin" , user.isAdmin());
                     editor.commit();
                     activity.runOnUiThread(() -> registerWithNotificationHubs());
-                    Intent intent = new Intent(activity , companiesListActivity.class);
-                    activity.runOnUiThread(() -> {startActivity(intent); activity.finish();});
 
                 } else {
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "username or password is incorrect", Toast.LENGTH_LONG).show());
@@ -105,10 +103,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void registerWithNotificationHubs()
     {
-        if (checkPlayServices()) {
+        if (checkPlayServices())
+        {
             // Start IntentService to register this application with FCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
+
+            intent = new Intent(this , companiesListActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 

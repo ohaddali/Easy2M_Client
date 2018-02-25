@@ -3,6 +3,7 @@ package nok.easy2m;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
@@ -30,7 +31,6 @@ public class NotificationManager
         android.app.NotificationManager mNotifyManager = (android.app.NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         int id = new Random().nextInt();
 
-        // When the loop is finished, updates the notification
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(this.fileUri);
@@ -39,12 +39,14 @@ public class NotificationManager
         int requestCode = 0;//My request code
         PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
 
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,"CHANNEL_ID");
         mBuilder.setContentText("Download complete " + this.fileName)
                 // Removes the progress bar
                 .setProgress(0,0,false)
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
         mNotifyManager.notify(id, mBuilder.build());
