@@ -2,9 +2,6 @@ package nok.easy2m.activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,9 +20,6 @@ import java.util.List;
 
 import nok.easy2m.*;
 import nok.easy2m.R;
-
-import nok.easy2m.communityLayer.SerializableObject;
-import nok.easy2m.models.Role;
 
 import nok.easy2m.communityLayer.CallBack;
 import nok.easy2m.communityLayer.HttpConnection;
@@ -77,7 +71,7 @@ public class AddWorkersActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS}, Globals.SEND_SMS);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS}, Globals.SEND_SMS_CODE);
         }
         else
         {

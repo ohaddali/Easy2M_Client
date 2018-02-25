@@ -1,14 +1,21 @@
 package nok.easy2m.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ListActivity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Pair;
 import android.view.View;
 import android.widget.DatePicker;
@@ -23,6 +30,7 @@ import com.android.volley.VolleyError;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +39,7 @@ import java.util.Locale;
 
 import nok.easy2m.AzureBlobsManager;
 import nok.easy2m.Globals;
+import nok.easy2m.NotificationManager;
 import nok.easy2m.R;
 import nok.easy2m.ReportAdapter;
 import nok.easy2m.communityLayer.CallBack;
@@ -48,6 +57,8 @@ public class ReportsActivity extends ListActivity  {
     RelativeLayout progressBar;
     DatePickerDialog dialog;
     SimpleDateFormat dateFormatter;
+    private Report chosenItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,31 +138,75 @@ public class ReportsActivity extends ListActivity  {
         }
         else
         {
-            FileOutputStream os = null;
-            try {
-                os = openFileOutput(item.getUrl(),MODE_APPEND);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            Activity activity =this;
-            CallBack<Boolean> callBack = success -> {
-                if(success)
-                {
-                    File[] files = ReportsActivity.this.getFilesDir().listFiles();
-                    int index = 0;
-                    for (File file:
-                         files) {
-                        if(file.getName().equals(item.getUrl()))
-                            break;
-                        index++;
-                    }
-
-                    //TODO : OPEN FILE
-                }
-            };
-            //AzureBlobsManager.GetFile(item.getUrl(),os,Globals.reportsContainer,callBack);
-
+            requestWriteExternalStorage(item);
         }
+    }
+
+    private void requestWriteExternalStorage(Report item)
+    {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            chosenItem = item;
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, Globals.WRITE_EXTERNAL_STORAGE_CODE);
+        }
+        else
+            downloadFile(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults)
+    {
+        Globals.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(Globals.writeAllow)
+            downloadFile(chosenItem);
+        else
+            Toast.makeText(getApplicationContext(), "Please confirm write external storage", Toast.LENGTH_SHORT).show();
+    }
+
+    private void downloadFile(Report item)
+    {
+        File file = null;
+        FileOutputStream fos = null;
+        try
+        {
+            file = getFile(item.getUrl());
+            fos = new FileOutputStream(file);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
+        Uri fileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".my.package.name.provider", file);
+        NotificationManager manager = new NotificationManager(getApplicationContext() , fileUri , item.getUrl());
+        CallBack<Boolean> callBack = (success) ->
+        {
+            if(success)
+            {
+                //send notification
+                manager.send();
+            }
+        };
+
+
+        AzureBlobsManager.GetFile(item.getUrl(),fos,Globals.reportsContainer,callBack);
+    }
+
+    private File getFile(String name) throws IOException
+    {
+        File home = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(home , name);
+        int index = 1;
+        while(file.exists())
+        {
+            file = new File(home , name.split("\\.")[0]+" (" + index + ")."+name.split("\\.")[1]);
+            index++;
+        }
+
+        file.createNewFile();
+        return  file;
     }
 
     private void exportReport(String date)
