@@ -15,17 +15,19 @@ public class Globals
 
     public static String imagesBlobUrl ="https://nokstorage.blob.core.windows.net/images/";
 
-    public static final int READ_CONTACTS = 1;
-    public static final int SEND_SMS = 2;
+    public static final int READ_CONTACTS_CODE = 1;
+    public static final int SEND_SMS_CODE = 2;
+    public static final int WRITE_EXTERNAL_STORAGE_CODE = 3;
     public static boolean GetContactsAllow = false;
     public static boolean SendSmsAllow = false;
+    public static boolean writeAllow = false;
 
     public static void onRequestPermissionsResult(int requestCode,
                                                   String permissions[], int[] grantResults)
     {
         switch (requestCode)
         {
-            case READ_CONTACTS:
+            case READ_CONTACTS_CODE:
             {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -37,7 +39,7 @@ public class Globals
 
                 return;
             }
-            case SEND_SMS:
+            case SEND_SMS_CODE:
             {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED)
@@ -45,6 +47,17 @@ public class Globals
                     Globals.SendSmsAllow = true;
                 else
                     Globals.SendSmsAllow = false;
+
+                return;
+            }
+            case WRITE_EXTERNAL_STORAGE_CODE:
+            {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+
+                    Globals.writeAllow = true;
+                else
+                    Globals.writeAllow = false;
 
                 return;
             }
