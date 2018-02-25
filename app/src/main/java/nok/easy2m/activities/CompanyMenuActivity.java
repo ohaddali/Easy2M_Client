@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import nok.easy2m.R;
@@ -23,7 +22,7 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
     private long companyId;
     private boolean isAdmin;
     private SharedPreferences pref;
-    private GridLayout gridLayout;
+    private LinearLayout linearLayout;
     Button addWorkers;
 
     @Override
@@ -42,14 +41,14 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         companyId = getIntent().getLongExtra("companyId" , 0);
         companyNameLbl.setText(companyName);
 
-        gridLayout = findViewById(R.id.user_gridlayout);
+        linearLayout = findViewById(R.id.user_gridlayout);
         if(isAdmin)
         {
             addWorkers = new Button(this);
             addWorkers.setText("Add Workers");
             addWorkers.setOnClickListener(this);
-            gridLayout.removeView(clockBtn);
-            gridLayout.addView(addWorkers);
+            linearLayout.removeView(clockBtn);
+            linearLayout.addView(addWorkers);
         }
 
         clockBtn.setOnClickListener(this);

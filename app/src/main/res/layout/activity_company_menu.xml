@@ -6,10 +6,13 @@
     android:layout_height="match_parent"
     tools:context="nok.easy2m.activities.CompanyMenuActivity"
     tools:layout_editor_absoluteY="81dp">
-    <GridLayout
+    <LinearLayout
         android:id="@+id/user_gridlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
         <Button
             android:id="@+id/menu_clockBtn"
             android:layout_width="103dp"
@@ -39,7 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-    </GridLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/menuLabel"

@@ -112,9 +112,6 @@ public class ReportsActivity extends ListActivity  {
                             Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);}),
                 pair1,pair2);
-
-        Report[] stam = new Report[1];
-        //response.execute(stam);
     }
 
 
