@@ -69,6 +69,7 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         else if(v == reportsBtn)
         {
             i= new Intent(this,ReportsActivity.class);
+            i.putExtra("companyId" , companyId);
             startActivity(i);
         }
         else if(v == timetableBtn)

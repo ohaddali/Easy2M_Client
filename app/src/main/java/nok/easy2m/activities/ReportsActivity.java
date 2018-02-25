@@ -69,11 +69,11 @@ public class ReportsActivity extends ListActivity  {
 
         pref = getSharedPreferences("label" , 0);
         workerId = pref.getLong("userId" , -1);
-        companyId = pref.getLong("companyId",-1);
         isAdmin = pref.getBoolean("admin",false);
         httpConnection = HttpConnection.getInstance(this);
         progressBar = findViewById(R.id.loadingPanel);
 
+        companyId = getIntent().getLongExtra("companyId" , -1);
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
 
         List<Report> reports = new ArrayList<>();
@@ -212,8 +212,8 @@ public class ReportsActivity extends ListActivity  {
     private void exportReport(String date)
     {
         Pair<String,Object> pair1 = new Pair<>("userId",workerId);
-        Pair<String,Object> pair2 = new Pair<>("date",date);
-        Pair<String,Object> pair3 = new Pair<>("companyId",companyId);
+        Pair<String,Object> pair2 = new Pair<>("companyId",companyId);
+        Pair<String,Object> pair3 = new Pair<>("date",date);
         CallBack<Boolean> resp = x->
                 runOnUiThread(()-> Toast.makeText(this, "The request for report in date " +date+" is on the way!", Toast.LENGTH_LONG).show());
         CallBack<VolleyError> err = error -> runOnUiThread(()-> Toast.makeText(this, "Error in request!", Toast.LENGTH_LONG).show());
