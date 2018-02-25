@@ -1,11 +1,13 @@
 package nok.easy2m.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import nok.easy2m.R;
@@ -19,6 +21,10 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
     TextView companyNameLbl;
     String companyName;
     private long companyId;
+    private boolean isAdmin;
+    private SharedPreferences pref;
+    private GridLayout gridLayout;
+    Button addWorkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +35,22 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         reportsBtn =findViewById(R.id.menu_reportsBtn);
         timetableBtn = findViewById(R.id.menu_timetableBtn);
         companyNameLbl = findViewById(R.id.menu_companynameLbl);
+        pref = getSharedPreferences("label" , 0);
+        isAdmin = pref.getBoolean("admin",false);
 
         companyName = getIntent().getStringExtra("companyName");
         companyId = getIntent().getLongExtra("companyId" , 0);
         companyNameLbl.setText(companyName);
+
+        gridLayout = findViewById(R.id.user_gridlayout);
+        if(isAdmin)
+        {
+            addWorkers = new Button(this);
+            addWorkers.setText("Add Workers");
+            addWorkers.setOnClickListener(this);
+            gridLayout.removeView(clockBtn);
+            gridLayout.addView(addWorkers);
+        }
 
         clockBtn.setOnClickListener(this);
         reportsBtn.setOnClickListener(this);
@@ -57,6 +75,11 @@ public class CompanyMenuActivity extends AppCompatActivity implements View.OnCli
         {
             i = new Intent(this, TimeTableActivity.class);
             i.putExtra("companyId" , companyId);
+            startActivity(i);
+        }
+        else if (v == addWorkers)
+        {
+            i = new Intent(this,AddRolesActivity.class);
             startActivity(i);
         }
     }
