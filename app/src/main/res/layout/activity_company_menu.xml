@@ -11,21 +11,23 @@
         android:id="@+id/menu_clockBtn"
         android:layout_width="103dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
+        android:layout_marginBottom="45dp"
         android:text="CLOCK"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintBottom_toTopOf="@+id/menu_reportsBtn"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/menu_reportsBtn"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
         android:text="REPORTS"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_clockBtn" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.561" />
 
     <Button
         android:id="@+id/menu_timetableBtn"
@@ -33,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:text="TIME TABLE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_reportsBtn" />
 
     <TextView
@@ -52,10 +54,10 @@
         android:id="@+id/menu_companynameLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:text="TextView"
         android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/menuLabel"
         app:layout_constraintTop_toBottomOf="@+id/menuLabel" />
 </android.support.constraint.ConstraintLayout>

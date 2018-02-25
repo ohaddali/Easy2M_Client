@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.Call;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -76,22 +78,23 @@ public class ClockActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
-                enterByRole(workerId , currentCompanyId , new Date().toString());
+                enterByRole(workerId , currentCompanyId , Calendar.getInstance().getTime());
             }
             else
             {
                 long enterId = pref.getLong("enterId" , -1);
 
-                exit(enterId , new Date().toString());
+                exit(enterId , Calendar.getInstance().getTime());
             }
         }
     }
 
-    private void exit(long enterId, String endTime)
+    private void exit(long enterId, Date endTime)
     {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         HttpConnection httpConnection = HttpConnection.getInstance(this);
         Pair<String,Object> pair1 = new Pair<>("enterId" , enterId);
-        Pair<String,Object> pair2 = new Pair<>("endTime" , endTime);
+        Pair<String,Object> pair2 = new Pair<>("endTime" , df.format(endTime));
         CallBack<Boolean> resp = (success) ->
         {
             if(success)
@@ -118,12 +121,13 @@ public class ClockActivity extends AppCompatActivity implements View.OnClickList
         httpConnection.send(Services.clock , "exit" , resp , Boolean.class , null , pair1 , pair2);
     }
 
-    private void enterByRole(long workerId, long companyId, String enterTime)
+    private void enterByRole(long workerId, long companyId, Date enterTime)
     {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         HttpConnection httpConnection = HttpConnection.getInstance(this);
         Pair<String,Object> pair1 = new Pair<>("workerId" , workerId);
         Pair<String,Object> pair2 = new Pair<>("companyId" , companyId);
-        Pair<String,Object> pair3 = new Pair<>("time" , enterTime);
+        Pair<String,Object> pair3 = new Pair<>("time" , df.format(enterTime));
         CallBack<Long> resp = (enterId) ->
         {
             if(enterId != -1)

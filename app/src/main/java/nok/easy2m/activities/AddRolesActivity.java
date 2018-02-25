@@ -145,11 +145,12 @@ public class AddRolesActivity extends ListActivity {
         CallBack<Boolean> resp = objects -> {
 
         };
+
         for(int i=1 ; i<=7 ;i++)
         {
             HttpConnection httpConnection = HttpConnection.getInstance(this);
             Shift newShift = new Shift(companyId, id, "00:00:00", "23:59:59", i);
-            Pair<String, Object> pair1 = new Pair<>("newShift", newShift);
+            Pair<String, Object> pair1 = new Pair<>("newShift", SerializableObject.toJSON(newShift));
 
             httpConnection.send(Services.shift, "addShift", resp, Boolean.class, null, pair1);
         }
