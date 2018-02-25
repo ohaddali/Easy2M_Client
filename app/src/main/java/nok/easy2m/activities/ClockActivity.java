@@ -3,6 +3,8 @@ package nok.easy2m.activities;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.Call;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +18,9 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import nok.easy2m.R;
+import nok.easy2m.communityLayer.CallBack;
+import nok.easy2m.communityLayer.HttpConnection;
+import nok.easy2m.models.Services;
 
 public class ClockActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,6 +32,7 @@ public class ClockActivity extends AppCompatActivity implements View.OnClickList
     private Button timerButton;
     private Timer timer;
     private MyTimerTask myTask;
+    private long workerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,7 +43,8 @@ public class ClockActivity extends AppCompatActivity implements View.OnClickList
         pref = getSharedPreferences("label" , 0);
         startTime = pref.getLong("timer" , -1);
         currentTimerCompany = pref.getLong("companyTimer" , -1);
-
+        workerId = pref.getLong("userId" , -1);
+        
         currentCompanyId = getIntent().getLongExtra("companyId" , 0);
 
         timerText = findViewById(R.id.timerText);
@@ -69,26 +76,30 @@ public class ClockActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
-                long time = System.currentTimeMillis();
-                currentTimerCompany = currentCompanyId;
-                startTime = time;
-
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putLong("companyTimer" , currentCompanyId);
-                editor.putLong("timer" , time);
-                editor.commit();
-
-                timer = new Timer();
-                myTask = new MyTimerTask();
-                timer.schedule(myTask,0,1000);
-
-                timerButton.setText("EXIT");
+                enterByRole(workerId , currentCompanyId , new Date().toString());
             }
             else
+            {
+                long enterId = pref.getLong("enterId" , -1);
+
+                exit(enterId , new Date().toString());
+            }
+        }
+    }
+
+    private void exit(long enterId, String endTime)
+    {
+        HttpConnection httpConnection = HttpConnection.getInstance(this);
+        Pair<String,Object> pair1 = new Pair<>("enterId" , enterId);
+        Pair<String,Object> pair2 = new Pair<>("endTime" , endTime);
+        CallBack<Boolean> resp = (success) ->
+        {
+            if(success)
             {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.remove("companyTimer");
                 editor.remove("timer");
+                editor.remove("enterId");
                 editor.commit();
 
                 currentTimerCompany = -1;
@@ -97,9 +108,49 @@ public class ClockActivity extends AppCompatActivity implements View.OnClickList
                 timer.cancel();
                 timer.purge();
 
-                timerButton.setText("ENTER");
+                runOnUiThread(() -> timerButton.setText("ENTER"));
+                runOnUiThread(() -> Toast.makeText(this, "Exit successfully", Toast.LENGTH_LONG).show());
             }
-        }
+            else
+                runOnUiThread(() -> Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show());
+        };
+
+        httpConnection.send(Services.clock , "exit" , resp , Boolean.class , null , pair1 , pair2);
+    }
+
+    private void enterByRole(long workerId, long companyId, String enterTime)
+    {
+        HttpConnection httpConnection = HttpConnection.getInstance(this);
+        Pair<String,Object> pair1 = new Pair<>("workerId" , workerId);
+        Pair<String,Object> pair2 = new Pair<>("companyId" , companyId);
+        Pair<String,Object> pair3 = new Pair<>("time" , enterTime);
+        CallBack<Long> resp = (enterId) ->
+        {
+            if(enterId != -1)
+            {
+                long time = System.currentTimeMillis();
+                currentTimerCompany = currentCompanyId;
+                startTime = time;
+
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putLong("companyTimer" , currentCompanyId);
+                editor.putLong("timer" , time);
+                editor.putLong("enterId" , enterId);
+                editor.commit();
+
+                timer = new Timer();
+                myTask = new MyTimerTask();
+                timer.schedule(myTask,0,1000);
+
+                runOnUiThread(() -> timerButton.setText("EXIT"));
+                runOnUiThread(() -> Toast.makeText(this, "Enter successfully", Toast.LENGTH_LONG).show());
+            }
+            else
+                runOnUiThread(() -> Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show());
+
+        };
+
+        httpConnection.send(Services.clock , "enterByWorker" , resp , Long.class , null , pair1 , pair2 , pair3 );
     }
 
     class MyTimerTask extends TimerTask
