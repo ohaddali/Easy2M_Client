@@ -15,9 +15,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import nok.easy2m.Globals;
 import nok.easy2m.R;
@@ -76,7 +74,7 @@ public class AddRolesActivity extends ListActivity {
     {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, Globals.READ_CONTACTS);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS}, Globals.READ_CONTACTS_CODE);
         }
         else
             sendRole();
