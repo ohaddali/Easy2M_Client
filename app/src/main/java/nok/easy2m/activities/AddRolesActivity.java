@@ -27,6 +27,7 @@ import nok.easy2m.communityLayer.HttpConnection;
 import nok.easy2m.communityLayer.SerializableObject;
 import nok.easy2m.models.Role;
 import nok.easy2m.models.Services;
+import nok.easy2m.models.Shift;
 
 public class AddRolesActivity extends ListActivity {
 
@@ -124,6 +125,7 @@ public class AddRolesActivity extends ListActivity {
             {
                 newRole.setId(id);
                 addedRoles.add(newRole);
+                addShift(id);
                 if(roleIndex == roles.size() - 1)
                     requestReadContacts();
             }
@@ -135,6 +137,23 @@ public class AddRolesActivity extends ListActivity {
 
         httpConnection.send(Services.roles,"addRole",resp,Long.class,null,pair1,pair2);
         //resp.execute(new Long(4));
+
+    }
+
+    private void addShift(Long id)
+    {
+        CallBack<Boolean> resp = objects -> {
+
+        };
+        for(int i=1 ; i<=7 ;i++)
+        {
+            HttpConnection httpConnection = HttpConnection.getInstance(this);
+            Shift newShift = new Shift(companyId, id, "00:00:00", "23:59:59", i);
+            Pair<String, Object> pair1 = new Pair<>("newShift", newShift);
+
+            httpConnection.send(Services.shift, "addShift", resp, Boolean.class, null, pair1);
+        }
+
 
     }
 
