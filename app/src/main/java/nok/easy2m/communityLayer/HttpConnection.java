@@ -38,7 +38,7 @@ public class HttpConnection
     private HttpConnection(Context context)
     {
         this.context = context;
-        this.domain = "http://192.168.1.15"; //TODO: Change with domain
+        this.domain = "https://wcfserver20180226012936.azurewebsites.net"; //TODO: Change with domain
         queue = Volley.newRequestQueue(context);
     }
 
