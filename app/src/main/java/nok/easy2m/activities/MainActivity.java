@@ -3,12 +3,14 @@ package nok.easy2m.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.opengl.Visibility;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     SharedPreferences pref;
+    private RelativeLayout progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerBtn.setOnClickListener(this);
         pref = getSharedPreferences("label",0);
 
-
+        progressBar = findViewById(R.id.mainLoadingPanel);
+        progressBar.setVisibility(View.GONE);
         /*Intent i = new Intent(this , ClockActivity.class);
         long id = 5;
         i.putExtra("companyId" , id);
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Activity activity = this;
             CallBack<User> responseCallBack = (user) ->
             {
+                progressBar.setVisibility(View.GONE);
                 if (user.isLoggedIn()) {
 
                     SharedPreferences.Editor editor = pref.edit();
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     activity.runOnUiThread(() -> Toast.makeText(getApplicationContext(), "username or password is incorrect", Toast.LENGTH_LONG).show());
                 }
             };
+            progressBar.setVisibility(View.VISIBLE);
             login(username, password, responseCallBack);
         }
         else if(view.getId() == registerBtn.getId())
@@ -98,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         Pair <String , Object> pair1 = new Pair<>("userName",username);
         Pair <String , Object> pair2 = new Pair<>("password",password);
-        httpConnection.send(Services.auth,"login",responseCallBack , User.class , null , pair1, pair2);
+        httpConnection.send(Services.auth,"login",responseCallBack , User.class , (error) ->  progressBar.setVisibility(View.GONE) , pair1, pair2);
     }
 
     public void registerWithNotificationHubs()

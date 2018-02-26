@@ -38,7 +38,7 @@ public class HttpConnection
     private HttpConnection(Context context)
     {
         this.context = context;
-        this.domain = "https://easy2mserver.azurewebsites.net"; //TODO: Change with domain
+        this.domain = "https://easy2mserver.azurewebsites.net";
         queue = Volley.newRequestQueue(context);
     }
 
